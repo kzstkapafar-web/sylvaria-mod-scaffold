@@ -6,14 +6,11 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.portal.DimensionTransition;
+import net.minecraft.world.phys.Vec3;
 import net.sylvariamod.dimension.ModDimensions;
 import net.sylvariamod.portal.SylvariaTeleporter;
 
-/**
- * A simple portal block - no frame detection, just place it and step in.
- * Bidirectional: walking into it in the Overworld sends you to Sylvaria,
- * walking into it in Sylvaria sends you back to the Overworld spawn.
- */
 public class SylvariaPortalBlock extends Block {
 
     public SylvariaPortalBlock(Properties properties) {
@@ -40,9 +37,19 @@ public class SylvariaPortalBlock extends Block {
                 ? destination.getSharedSpawnPos()
                 : new BlockPos(pos.getX(), 6, pos.getZ());
 
-        Entity teleported = entity.changeDimension(destination, new SylvariaTeleporter(destPos));
-        if (teleported != null) {
-            teleported.setPortalCooldown();
-        }
+        SylvariaTeleporter.prepareLandingSpot(destination, destPos);
+
+        DimensionTransition transition = new DimensionTransition(
+                destination,
+                new Vec3(destPos.getX() + 0.5, destPos.getY() + 1.0, destPos.getZ() + 0.5),
+                Vec3.ZERO,
+                entity.getYRot(),
+                entity.getXRot(),
+                false,
+                DimensionTransition.DO_NOTHING
+        );
+
+        entity.changeDimension(transition);
+        entity.setPortalCooldown();
     }
 }
