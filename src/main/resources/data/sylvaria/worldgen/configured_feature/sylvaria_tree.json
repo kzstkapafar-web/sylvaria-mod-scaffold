@@ -21,7 +21,7 @@
       "type": "minecraft:simple_state_provider",
       "state": {
         "Name": "sylvaria:sylvaria_leaves",
-        "Properties": { "distance": "7", "persistent": "false", "waterlogged": "false" }
+        "Properties": { "distance": "1", "persistent": "false", "waterlogged": "false" }
       }
     },
     "foliage_placer": {
