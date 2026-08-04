@@ -11,11 +11,11 @@ public final class SylvariaTeleporter {
     }
 
     public static void prepareLandingSpot(ServerLevel level, BlockPos pos) {
-        // Real terrain is uneven now, so instead of flattening a fixed-height
-        // platform we just make sure there's headroom to stand in and solid
-        // ground directly underfoot, wherever the surface actually is.
+        // Пол 3x3
         for (int x = -1; x <= 1; x++) {
             for (int z = -1; z <= 1; z++) {
+                BlockPos floor = pos.offset(x, -1, z);
+                level.setBlockAndUpdate(floor, Blocks.GRASS_BLOCK.defaultBlockState());
                 for (int y = 0; y <= 2; y++) {
                     BlockPos clear = pos.offset(x, y, z);
                     if (!level.getBlockState(clear).isAir()) {
@@ -25,11 +25,14 @@ public final class SylvariaTeleporter {
             }
         }
 
-        BlockPos floor = pos.below();
-        if (level.getBlockState(floor).isAir()) {
-            level.setBlockAndUpdate(floor, Blocks.GRASS_BLOCK.defaultBlockState());
-        }
+        // Портал сбоку, не в точке спавна игрока
+        BlockPos portalPos = pos.offset(0, 0, 0);
+        level.setBlockAndUpdate(portalPos, ModBlocks.SYLVARIA_PORTAL.get().defaultBlockState());
 
-        level.setBlockAndUpdate(pos, ModBlocks.SYLVARIA_PORTAL.get().defaultBlockState());
+        // Место для игрока (+2 по X) — воздух и пол
+        BlockPos stand = pos.offset(2, 0, 0);
+        level.setBlockAndUpdate(stand.below(), Blocks.GRASS_BLOCK.defaultBlockState());
+        level.setBlockAndUpdate(stand, Blocks.AIR.defaultBlockState());
+        level.setBlockAndUpdate(stand.above(), Blocks.AIR.defaultBlockState());
     }
 }
