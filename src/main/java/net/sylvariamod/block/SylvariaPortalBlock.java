@@ -23,7 +23,8 @@ public class SylvariaPortalBlock extends Block {
         if (level.isClientSide() || !(level instanceof ServerLevel serverLevel)) {
             return;
         }
-        if (entity.isOnPortalCooldown()) {
+        // Уже на кулдауне или не может менять измерение
+        if (entity.isOnPortalCooldown() || !entity.canChangeDimensions(serverLevel, serverLevel)) {
             return;
         }
 
@@ -34,21 +35,28 @@ public class SylvariaPortalBlock extends Block {
             return;
         }
 
+        // Кулдаун СРАЗУ, до телепорта — иначе цикл каждый тик
+        entity.setPortalCooldown();
+
         BlockPos destPos;
         if (inSylvaria) {
             destPos = destination.getSharedSpawnPos();
         } else {
-            // Sylvaria now has real terrain (hills, caves, trees), so find the
-            // actual ground surface at this column instead of a fixed Y level.
-            int surfaceY = destination.getHeight(Heightmap.Types.WORLD_SURFACE, pos.getX(), pos.getZ());
+            int surfaceY = destination.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, pos.getX(), pos.getZ());
+            if (surfaceY < destination.getMinBuildHeight() + 1) {
+                surfaceY = 64;
+            }
             destPos = new BlockPos(pos.getX(), surfaceY, pos.getZ());
         }
 
+        // Площадка и обратный портал РЯДОМ, не под ногами
         SylvariaTeleporter.prepareLandingSpot(destination, destPos);
 
+        // Игрок встаёт на безопасную клетку РЯДОМ с порталом, не внутрь
+        BlockPos standPos = destPos.offset(2, 0, 0);
         DimensionTransition transition = new DimensionTransition(
                 destination,
-                new Vec3(destPos.getX() + 0.5, destPos.getY() + 1.0, destPos.getZ() + 0.5),
+                new Vec3(standPos.getX() + 0.5, destPos.getY() + 1.0, standPos.getZ() + 0.5),
                 Vec3.ZERO,
                 entity.getYRot(),
                 entity.getXRot(),
@@ -57,6 +65,5 @@ public class SylvariaPortalBlock extends Block {
         );
 
         entity.changeDimension(transition);
-        entity.setPortalCooldown();
     }
 }
