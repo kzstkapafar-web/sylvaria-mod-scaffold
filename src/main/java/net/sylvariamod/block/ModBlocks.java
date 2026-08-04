@@ -3,6 +3,8 @@ package net.sylvariamod.block;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -31,7 +33,7 @@ public class ModBlocks {
 
     // The actual portal - walk into it to teleport. Placed by hand (no flint & steel needed).
     public static final RegistryObject<Block> SYLVARIA_PORTAL = BLOCKS.register("sylvaria_portal",
-            () -> new SylvariaPortalBlock(BlockBehaviour.Properties.of()
+            () -> new net.sylvariamod.block.SylvariaPortalBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_GREEN)
                     .noCollission()
                     .strength(-1.0F)
@@ -42,4 +44,35 @@ public class ModBlocks {
 
     public static final RegistryObject<Item> SYLVARIA_PORTAL_ITEM = ITEMS.register("sylvaria_portal",
             () -> new BlockItem(SYLVARIA_PORTAL.get(), new Item.Properties()));
+
+    // ---- Magical forest tree ----
+
+    // Log - violet bark, behaves like a normal log (axis-rotated pillar).
+    public static final RegistryObject<Block> SYLVARIA_LOG = BLOCKS.register("sylvaria_log",
+            () -> new RotatedPillarBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_PURPLE)
+                    .strength(2.0F)
+                    .sound(SoundType.WOOD)
+                    .ignitedByLava()));
+
+    public static final RegistryObject<Item> SYLVARIA_LOG_ITEM = ITEMS.register("sylvaria_log",
+            () -> new BlockItem(SYLVARIA_LOG.get(), new Item.Properties()));
+
+    // Leaves - softly glowing violet leaves (light level 6, like a dim natural light source).
+    public static final RegistryObject<Block> SYLVARIA_LEAVES = BLOCKS.register("sylvaria_leaves",
+            () -> new LeavesBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_PURPLE)
+                    .strength(0.2F)
+                    .randomTicks()
+                    .sound(SoundType.GRASS)
+                    .noOcclusion()
+                    .isValidSpawn((state, level, pos, type) -> false)
+                    .isSuffocating((state, level, pos) -> false)
+                    .isViewBlocking((state, level, pos) -> false)
+                    .ignitedByLava()
+                    .pushReaction(PushReaction.DESTROY)
+                    .lightLevel(state -> 6)));
+
+    public static final RegistryObject<Item> SYLVARIA_LEAVES_ITEM = ITEMS.register("sylvaria_leaves",
+            () -> new BlockItem(SYLVARIA_LEAVES.get(), new Item.Properties()));
 }
