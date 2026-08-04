@@ -60,4 +60,3 @@ public class SylvariaPortalBlock extends Block {
         entity.setPortalCooldown();
     }
 }
-}
