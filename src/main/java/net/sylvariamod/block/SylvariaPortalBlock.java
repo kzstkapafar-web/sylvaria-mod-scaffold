@@ -6,6 +6,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.Vec3;
 import net.sylvariamod.dimension.ModDimensions;
@@ -33,9 +34,15 @@ public class SylvariaPortalBlock extends Block {
             return;
         }
 
-        BlockPos destPos = inSylvaria
-                ? destination.getSharedSpawnPos()
-                : new BlockPos(pos.getX(), 6, pos.getZ());
+        BlockPos destPos;
+        if (inSylvaria) {
+            destPos = destination.getSharedSpawnPos();
+        } else {
+            // Sylvaria now has real terrain (hills, caves, trees), so find the
+            // actual ground surface at this column instead of a fixed Y level.
+            int surfaceY = destination.getHeight(Heightmap.Types.WORLD_SURFACE, pos.getX(), pos.getZ());
+            destPos = new BlockPos(pos.getX(), surfaceY, pos.getZ());
+        }
 
         SylvariaTeleporter.prepareLandingSpot(destination, destPos);
 
@@ -52,4 +59,5 @@ public class SylvariaPortalBlock extends Block {
         entity.changeDimension(transition);
         entity.setPortalCooldown();
     }
+}
 }
