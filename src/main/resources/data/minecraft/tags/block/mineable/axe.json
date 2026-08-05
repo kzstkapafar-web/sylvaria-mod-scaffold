@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "sylvaria:sylvaria_log",
-    "sylvaria:sylvaria_stripped_log"
+    "sylvaria:sylvaria_stripped_log",
+    "sylvaria:sylvaria_planks"
   ]
 }

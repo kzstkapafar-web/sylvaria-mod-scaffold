@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "planks",
+  "ingredients": [
+    { "item": "sylvaria:sylvaria_log" }
+  ],
+  "result": {
+    "id": "sylvaria:sylvaria_planks",
+    "count": 4
+  }
+}

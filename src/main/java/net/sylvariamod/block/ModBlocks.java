@@ -48,8 +48,9 @@ public class ModBlocks {
     // ---- Magical forest tree ----
 
     // Log - violet bark, behaves like a normal log (axis-rotated pillar).
+    // Uses SylvariaLogBlock so right-clicking with an axe strips it into SYLVARIA_STRIPPED_LOG.
     public static final RegistryObject<Block> SYLVARIA_LOG = BLOCKS.register("sylvaria_log",
-            () -> new RotatedPillarBlock(BlockBehaviour.Properties.of()
+            () -> new SylvariaLogBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_PURPLE)
                     .strength(2.0F)
                     .sound(SoundType.WOOD)
@@ -57,6 +58,28 @@ public class ModBlocks {
 
     public static final RegistryObject<Item> SYLVARIA_LOG_ITEM = ITEMS.register("sylvaria_log",
             () -> new BlockItem(SYLVARIA_LOG.get(), new Item.Properties()));
+
+    // Stripped log - result of using an axe on SYLVARIA_LOG.
+    public static final RegistryObject<Block> SYLVARIA_STRIPPED_LOG = BLOCKS.register("sylvaria_stripped_log",
+            () -> new RotatedPillarBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_PURPLE)
+                    .strength(2.0F)
+                    .sound(SoundType.WOOD)
+                    .ignitedByLava()));
+
+    public static final RegistryObject<Item> SYLVARIA_STRIPPED_LOG_ITEM = ITEMS.register("sylvaria_stripped_log",
+            () -> new BlockItem(SYLVARIA_STRIPPED_LOG.get(), new Item.Properties()));
+
+    // Planks - crafted from sylvaria_log (1 log -> 4 planks).
+    public static final RegistryObject<Block> SYLVARIA_PLANKS = BLOCKS.register("sylvaria_planks",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_PURPLE)
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.WOOD)
+                    .ignitedByLava()));
+
+    public static final RegistryObject<Item> SYLVARIA_PLANKS_ITEM = ITEMS.register("sylvaria_planks",
+            () -> new BlockItem(SYLVARIA_PLANKS.get(), new Item.Properties()));
 
     // Leaves - softly glowing violet leaves (light level 6, like a dim natural light source).
     public static final RegistryObject<Block> SYLVARIA_LEAVES = BLOCKS.register("sylvaria_leaves",
