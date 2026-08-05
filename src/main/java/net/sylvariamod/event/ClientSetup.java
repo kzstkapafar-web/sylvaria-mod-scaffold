@@ -27,17 +27,19 @@ public class ClientSetup {
     }
 
     @SubscribeEvent
+    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerBlockEntityRenderer(ModBlockEntities.SYLVARIA_GLOW_MUSHROOM.get(),
+                SylvariaGlowMushroomRenderer::new);
+    }
+
+    // The emissive overlay model (models/block/sylvaria_glow_mushroom_emissive.json) is not
+    // referenced by any blockstate, so the ModelManager never bakes it on its own. Without this
+    // registration, SylvariaGlowMushroomRenderer's getModel(...) lookup silently falls back to
+    // Minecraft's built-in "missing model" (the pink/black checkerboard cube), which is what was
+    // being drawn on top of the real, correctly-textured mushroom model.
+    @SubscribeEvent
     public static void onRegisterAdditional(ModelEvent.RegisterAdditional event) {
         event.register(ModelResourceLocation.standalone(
                 ResourceLocation.fromNamespaceAndPath(SylvariaMod.MODID, "block/sylvaria_glow_mushroom_emissive")));
-    }
-
-    // Модель свечения (models/block/sylvaria_glow_mushroom_emissive.json) не привязана
-    // ни к одному blockstate, поэтому ModelManager сам её не запекает. Без этой регистрации
-    // getModel(...) в SylvariaGlowMushroomRenderer возвращал дефолтную "missing model"
-    // (розово-чёрный куб-шахматку) — именно это и рисовалось поверх настоящего гриба.
-    @SubscribeEvent
-    public static void onRegisterAdditional(ModelEvent.RegisterAdditional event) {
-        event.register(ResourceLocation.fromNamespaceAndPath(SylvariaMod.MODID, "block/sylvaria_glow_mushroom_emissive"));
     }
 }
