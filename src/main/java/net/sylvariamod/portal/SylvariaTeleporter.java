@@ -67,7 +67,7 @@ public final class SylvariaTeleporter {
         long bestDist = Long.MAX_VALUE;
         long radiusSq = (long) radius * radius;
         for (BlockPos anchor : registry.anchors()) {
-            long d = anchor.distSqr(nominal);
+            double d = anchor.distSqr(nominal);
             if (d <= radiusSq && d < bestDist) {
                 bestDist = d;
                 closest = anchor;
