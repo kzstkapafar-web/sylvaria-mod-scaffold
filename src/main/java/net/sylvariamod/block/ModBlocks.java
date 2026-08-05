@@ -102,4 +102,20 @@ public class ModBlocks {
 
     public static final RegistryObject<Item> SYLVARIA_LEAVES_ITEM = ITEMS.register("sylvaria_leaves",
             () -> new BlockItem(SYLVARIA_LEAVES.get(), new Item.Properties()));
+
+    // ---- Decorative glowing mushroom ----
+    // Custom cap+stem 3D model (not a flat cross-plant). Light level 15 lights up the
+    // surroundings; the emissive overlay (see SylvariaGlowMushroomBlockEntity/Renderer)
+    // additionally keeps the glow-spot pixels bright even in shadow.
+    public static final RegistryObject<Block> SYLVARIA_GLOW_MUSHROOM = BLOCKS.register("sylvaria_glow_mushroom",
+            () -> new net.sylvariamod.block.SylvariaGlowMushroomBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_PURPLE)
+                    .noCollission()
+                    .instabreak()
+                    .sound(SoundType.GRASS)
+                    .lightLevel(state -> 15)
+                    .pushReaction(PushReaction.DESTROY)));
+
+    public static final RegistryObject<Item> SYLVARIA_GLOW_MUSHROOM_ITEM = ITEMS.register("sylvaria_glow_mushroom",
+            () -> new BlockItem(SYLVARIA_GLOW_MUSHROOM.get(), new Item.Properties()));
 }

@@ -1,0 +1,81 @@
+package net.sylvariamod.block;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.sylvariamod.block.entity.SylvariaGlowMushroomBlockEntity;
+
+import javax.annotation.Nullable;
+
+/**
+ * Custom glowing mushroom - cap+stem 3D model (see models/block/sylvaria_glow_mushroom.json),
+ * emits light itself AND carries a BlockEntity purely so SylvariaGlowMushroomRenderer can draw
+ * an always-full-bright emissive overlay on top of the normal model (see that class for details).
+ *
+ * Placement rules mirror vanilla mushrooms: dirt, podzol, mycelium or moss.
+ */
+public class SylvariaGlowMushroomBlock extends BaseEntityBlock {
+
+    // Bounding box roughly matching the cap+stem model's overall extent.
+    protected static final VoxelShape SHAPE = Block.box(3.0D, 0.0D, 1.0D, 15.0D, 13.0D, 13.0D);
+
+    public SylvariaGlowMushroomBlock(BlockBehaviour.Properties properties) {
+        super(properties);
+    }
+
+    @Override
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return SHAPE;
+    }
+
+    @Override
+    protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return Shapes.empty();
+    }
+
+    @Override
+    public RenderShape getRenderShape(BlockState state) {
+        // MODEL = the normal baked model still renders; the BlockEntityRenderer
+        // additionally draws the emissive overlay on top of it.
+        return RenderShape.MODEL;
+    }
+
+    @Override
+    protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+        BlockState below = level.getBlockState(pos.below());
+        return below.is(BlockTags.DIRT)
+                || below.is(Blocks.PODZOL)
+                || below.is(Blocks.MYCELIUM)
+                || below.is(Blocks.MOSS_BLOCK)
+                || below.is(Blocks.GRASS_BLOCK);
+    }
+
+    @Override
+    protected boolean useShapeForLightOcclusion(BlockState state) {
+        return true;
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new SylvariaGlowMushroomBlockEntity(pos, state);
+    }
+
+    @Override
+    public PushReaction getPistonPushReaction(BlockState state) {
+        return PushReaction.DESTROY;
+    }
+}
