@@ -1,5 +1,6 @@
 {
   "variants": {
-    "": { "model": "sylvaria:block/sylvaria_portal" }
+    "axis=x": { "model": "sylvaria:block/sylvaria_portal" },
+    "axis=z": { "model": "sylvaria:block/sylvaria_portal", "y": 90 }
   }
 }
