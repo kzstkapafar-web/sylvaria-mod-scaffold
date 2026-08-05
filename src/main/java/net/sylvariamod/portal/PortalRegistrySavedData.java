@@ -27,7 +27,7 @@ public class PortalRegistrySavedData extends SavedData {
 
     public static PortalRegistrySavedData get(ServerLevel level) {
         return level.getDataStorage().computeIfAbsent(
-                new SavedData.Factory<>(PortalRegistrySavedData::new, PortalRegistrySavedData::load),
+                new SavedData.Factory<>(PortalRegistrySavedData::new, PortalRegistrySavedData::load, null),
                 DATA_NAME
         );
     }
