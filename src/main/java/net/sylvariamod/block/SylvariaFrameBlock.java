@@ -2,8 +2,8 @@ package net.sylvariamod.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.FlintAndSteelItem;
 import net.minecraft.world.item.ItemStack;
@@ -29,27 +29,34 @@ public class SylvariaFrameBlock extends Block {
     }
 
     @Override
-    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
-                                           Player player, InteractionHand hand, BlockHitResult hit) {
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
+                                              Player player, InteractionHand hand, BlockHitResult hit) {
+
         if (!(stack.getItem() instanceof FlintAndSteelItem)) {
-            return InteractionResult.PASS;
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
+
         if (level.isClientSide()) {
-            // На клиенте просто говорим "успех", чтобы не проигрывать анимацию промаха;
-            // реальное зажигание происходит на сервере.
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.sidedSuccess(true);
         }
+
         SylvariaPortalShape.Shape shape = SylvariaPortalShape.tryIgnite(level, pos);
-        return shape != null ? InteractionResult.SUCCESS : InteractionResult.PASS;
+
+        return shape != null
+                ? ItemInteractionResult.sidedSuccess(false)
+                : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+    protected void onRemove(BlockState state, Level level, BlockPos pos,
+                            BlockState newState, boolean movedByPiston) {
+
         if (!state.is(newState.getBlock())) {
             for (Direction dir : Direction.values()) {
                 SylvariaPortalShape.clearIfBroken(level, pos.relative(dir));
             }
         }
+
         super.onRemove(state, level, pos, newState, movedByPiston);
     }
 }
