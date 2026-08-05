@@ -1,6 +1,6 @@
 {
-     "replace": false,
-     "values": [
-       "sylvaria:sylvaria_log"
-     ]
-   }
+  "replace": false,
+  "values": [
+    "sylvaria:sylvaria_log"
+  ]
+}
