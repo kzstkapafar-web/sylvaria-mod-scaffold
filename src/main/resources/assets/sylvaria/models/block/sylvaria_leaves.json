@@ -3,5 +3,5 @@
   "textures": {
     "all": "sylvaria:block/sylvaria_leaves"
   },
-  "render_type": "cutoutMipped"
+  "render_type": "minecraft:cutout_mipped"
 }
