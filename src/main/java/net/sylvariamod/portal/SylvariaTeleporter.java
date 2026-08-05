@@ -64,7 +64,7 @@ public final class SylvariaTeleporter {
 
     private static BlockPos findNearby(PortalRegistrySavedData registry, BlockPos nominal, int radius) {
         BlockPos closest = null;
-        long bestDist = Long.MAX_VALUE;
+        double bestDist = Long.MAX_VALUE;
         long radiusSq = (long) radius * radius;
         for (BlockPos anchor : registry.anchors()) {
             double d = anchor.distSqr(nominal);
