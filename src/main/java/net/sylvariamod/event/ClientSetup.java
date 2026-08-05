@@ -2,6 +2,7 @@ package net.sylvariamod.event;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelEvent;
@@ -26,9 +27,9 @@ public class ClientSetup {
     }
 
     @SubscribeEvent
-    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerBlockEntityRenderer(ModBlockEntities.SYLVARIA_GLOW_MUSHROOM.get(),
-                SylvariaGlowMushroomRenderer::new);
+    public static void onRegisterAdditional(ModelEvent.RegisterAdditional event) {
+        event.register(ModelResourceLocation.standalone(
+                ResourceLocation.fromNamespaceAndPath(SylvariaMod.MODID, "block/sylvaria_glow_mushroom_emissive")));
     }
 
     // Модель свечения (models/block/sylvaria_glow_mushroom_emissive.json) не привязана
