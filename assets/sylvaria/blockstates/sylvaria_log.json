@@ -1,7 +1,0 @@
-{
-  "variants": {
-    "axis=x": { "model": "sylvaria:block/sylvaria_log_horizontal", "x": 90, "y": 90 },
-    "axis=y": { "model": "sylvaria:block/sylvaria_log" },
-    "axis=z": { "model": "sylvaria:block/sylvaria_log_horizontal", "x": 90 }
-  }
-}
