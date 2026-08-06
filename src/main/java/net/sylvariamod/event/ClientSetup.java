@@ -39,7 +39,8 @@ public class ClientSetup {
     // being drawn on top of the real, correctly-textured mushroom model.
     @SubscribeEvent
     public static void onRegisterAdditional(ModelEvent.RegisterAdditional event) {
-        event.register(ModelResourceLocation.standalone(
-                ResourceLocation.fromNamespaceAndPath(SylvariaMod.MODID, "block/sylvaria_glow_mushroom_emissive")));
+        event.register(new ModelResourceLocation(
+                ResourceLocation.fromNamespaceAndPath(SylvariaMod.MODID, "block/sylvaria_glow_mushroom_emissive"),
+                "standalone"));
     }
 }
