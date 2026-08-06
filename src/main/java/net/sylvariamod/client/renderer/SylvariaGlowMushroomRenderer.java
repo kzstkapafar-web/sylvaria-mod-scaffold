@@ -20,6 +20,12 @@ import net.sylvariamod.block.entity.SylvariaGlowMushroomBlockEntity;
  * at a texture that is transparent everywhere except the glow-spot pixels) on top of the normal
  * block model, using a forced full-bright lightmap. That's what keeps the glow spots bright
  * even in shadow/darkness - the same underlying trick vanilla uses for things like mob eyes.
+ *
+ * IMPORTANT: this overlay shares the EXACT same coordinates as the base model (copy-pasted
+ * element boxes). Drawing it as a second pass at identical depth causes z-fighting wherever the
+ * emissive texture is opaque (the glow-spot pixels) - that's the flicker/dither seen on the white
+ * spots. Fixed by nudging the overlay outward by a hair (scaled ~0.4% around the block center)
+ * so its faces are no longer exactly coplanar with the base model's faces.
  */
 public class SylvariaGlowMushroomRenderer implements BlockEntityRenderer<SylvariaGlowMushroomBlockEntity> {
 
@@ -49,6 +55,12 @@ public class SylvariaGlowMushroomRenderer implements BlockEntityRenderer<Sylvari
         VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.cutout());
 
         poseStack.pushPose();
+        // Nudge the overlay geometry outward a hair so it isn't perfectly coplanar with the
+        // base model - kills the z-fight without any visible size difference (0.4% growth,
+        // scaled around the block's own center so it doesn't drift/clip into neighbor blocks).
+        poseStack.translate(0.5D, 0.5D, 0.5D);
+        poseStack.scale(1.004F, 1.004F, 1.004F);
+        poseStack.translate(-0.5D, -0.5D, -0.5D);
         Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(
                 poseStack.last(),
                 vertexConsumer,
