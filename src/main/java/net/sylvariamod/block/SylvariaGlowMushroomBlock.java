@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.sylvariamod.block.entity.SylvariaGlowMushroomBlockEntity;
 import javax.annotation.Nullable;
@@ -49,7 +48,12 @@ public class SylvariaGlowMushroomBlock extends BaseEntityBlock {
     }
     @Override
     protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return Shapes.empty();
+        // Раньше тут была Shapes.empty() - игрок физически проходил сквозь весь гриб
+        // насквозь и оказывался камерой внутри сплошной геометрии купола (отсюда
+        // "гигантские цветные плашки на весь экран" на скриншотах - это не дефект
+        // текстуры, а обычный вид ЛЮБОЙ грани в упор, когда камера в неё влезла).
+        // Настоящая коллизия по форме модели не даёт игроку туда попасть.
+        return SHAPE;
     }
     @Override
     public RenderShape getRenderShape(BlockState state) {

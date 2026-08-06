@@ -110,7 +110,6 @@ public class ModBlocks {
     public static final RegistryObject<Block> SYLVARIA_GLOW_MUSHROOM = BLOCKS.register("sylvaria_glow_mushroom",
             () -> new net.sylvariamod.block.SylvariaGlowMushroomBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_PURPLE)
-                    .noCollission()
                     .instabreak()
                     .sound(SoundType.GRASS)
                     .lightLevel(state -> 15)
