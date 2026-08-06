@@ -26,8 +26,9 @@ import javax.annotation.Nullable;
  * Placement rules mirror vanilla mushrooms: dirt, podzol, mycelium or moss.
  */
 public class SylvariaGlowMushroomBlock extends BaseEntityBlock {
-    // Bounding box roughly matching the big+small mushroom cluster model's overall extent.
-    protected static final VoxelShape SHAPE = Block.box(1.0D, 0.0D, 1.0D, 16.0D, 16.0D, 16.0D);
+    // Bounding box roughly matching the big+small mushroom cluster model's overall extent
+    // (cap is flattened/squat now, so the box is shorter than a full block).
+    protected static final VoxelShape SHAPE = Block.box(1.0D, 0.0D, 1.0D, 16.0D, 13.0D, 16.0D);
 
     // Required since 1.21: every BaseEntityBlock subclass must expose a codec
     // so the block can be (de)serialized. simpleCodec() just needs the constructor.
