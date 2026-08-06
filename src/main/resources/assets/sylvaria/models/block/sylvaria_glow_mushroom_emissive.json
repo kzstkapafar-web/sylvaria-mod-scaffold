@@ -1,7 +1,148 @@
 {
-  "credit": "Sylvaria mod - custom glow mushroom (emissive overlay)",
-  "parent": "minecraft:block/cross",
+  "credit": "Sylvaria mod - custom glow mushroom (emissive overlay, same geometry as base model)",
+  "parent": "minecraft:block/block",
   "textures": {
+    "particle": "sylvaria:block/sylvaria_glow_mushroom_emissive",
     "cross": "sylvaria:block/sylvaria_glow_mushroom_emissive"
-  }
+  },
+  "elements": [
+    {
+      "name": "stem",
+      "from": [
+        6,
+        0,
+        6
+      ],
+      "to": [
+        10,
+        7,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            9,
+            10,
+            16
+          ],
+          "texture": "#cross"
+        },
+        "south": {
+          "uv": [
+            6,
+            9,
+            10,
+            16
+          ],
+          "texture": "#cross"
+        },
+        "east": {
+          "uv": [
+            6,
+            9,
+            10,
+            16
+          ],
+          "texture": "#cross"
+        },
+        "west": {
+          "uv": [
+            6,
+            9,
+            10,
+            16
+          ],
+          "texture": "#cross"
+        },
+        "up": {
+          "uv": [
+            6,
+            9,
+            10,
+            13
+          ],
+          "texture": "#cross"
+        },
+        "down": {
+          "uv": [
+            6,
+            13,
+            10,
+            16
+          ],
+          "texture": "#cross"
+        }
+      }
+    },
+    {
+      "name": "cap",
+      "from": [
+        0,
+        7,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            9
+          ],
+          "texture": "#cross"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            9
+          ],
+          "texture": "#cross"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            9
+          ],
+          "texture": "#cross"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            9
+          ],
+          "texture": "#cross"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            9
+          ],
+          "texture": "#cross"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            9
+          ],
+          "texture": "#cross"
+        }
+      }
+    }
+  ]
 }
