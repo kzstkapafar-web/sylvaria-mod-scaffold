@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
  */
 public class SylvariaGlowMushroomBlock extends BaseEntityBlock {
     // Bounding box roughly matching the cap+stem model's overall extent.
-    protected static final VoxelShape SHAPE = Block.box(3.0D, 0.0D, 1.0D, 15.0D, 13.0D, 13.0D);
+    protected static final VoxelShape SHAPE = Block.box(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D);
 
     // Required since 1.21: every BaseEntityBlock subclass must expose a codec
     // so the block can be (de)serialized. simpleCodec() just needs the constructor.
