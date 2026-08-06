@@ -21,29 +21,27 @@ import net.sylvariamod.client.renderer.SylvariaGlowMushroomRenderer;
 public class ClientSetup {
 
     // ---- Glow mushroom side-wall colors ----
-    // sylvaria_glow_mushroom.json's north/south/east/west (and stem "down") faces don't sample
-    // real texture pixels at all anymore - they point at a small pure-white swatch padded into
-    // the texture (cols 16-19) and rely on a "tintindex" to get their actual color from HERE,
-    // in Java, instead of from the atlas. That sidesteps the whole class of bug this block kept
-    // running into: those faces are tiny UV rects stretched across large, steeply-angled quads,
-    // and at that stretch ratio even a fraction-of-a-texel sampling error at a mip level or atlas
-    // edge could land on a neighboring sprite's pixel (or the next texel over) and show up as a
-    // stray colored line/patch. A vertex-tinted white source can't bleed into "wrong" content -
-    // white multiplied by anything just gives that color back exactly, every time, at any angle
-    // or distance. This is the same underlying engine feature vanilla uses for biome-tinted grass
-    // and leaves (BlockColor + "tintindex" in the model) - we're just supplying fixed constants
-    // instead of a biome lookup.
-    private static final int TINT_BIG_CAP    = 0x4E0F78; // (78,15,120)  - big cap rim
+    // Only the STEMS (big_stem / small_stem) still use the vertex-tint trick: their
+    // north/south/east/west/down faces point at a single pure-white pixel (uv ~15.3-15.7,
+    // corner of the texture) and get their real color from HERE via "tintindex", instead of
+    // sampling the atlas directly. That sidesteps a stretch-sampling bug on those tiny,
+    // steeply-angled quads - a vertex-tinted white source can't bleed into "wrong" content,
+    // since white multiplied by anything just gives that color back exactly, at any angle.
+    //
+    // The CAP rings (big_cap_0..7, small_cap_neck/belly/top) no longer use tintindex at all.
+    // Previously every ring shared the same tintindex (0 for big cap, 2 for small cap), so the
+    // whole stepped dome was painted a single flat color - the ridges of the model were visible
+    // but the color never changed between them ("layered cake" look). Each ring's side faces now
+    // point at its OWN small solid-color swatch baked directly into the texture (rows 9-15,
+    // previously-unused padding), forming a real 8-step light-to-dark gradient for the big cap
+    // and a 3-step one for the small cap, so the dome reads as one continuously shaded surface.
     private static final int TINT_BIG_STEM   = 0xAA78D2; // (170,120,210) - big stem
-    private static final int TINT_SMALL_CAP  = 0x7823AF; // (120,35,175) - small cap rim
     private static final int TINT_SMALL_STEM = 0x8C5FB9; // (140,95,185) - small stem
 
     @SubscribeEvent
     public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
         event.register((state, level, pos, tintIndex) -> switch (tintIndex) {
-            case 0 -> TINT_BIG_CAP;
             case 1 -> TINT_BIG_STEM;
-            case 2 -> TINT_SMALL_CAP;
             case 3 -> TINT_SMALL_STEM;
             default -> 0xFFFFFF;
         }, ModBlocks.SYLVARIA_GLOW_MUSHROOM.get());
@@ -51,13 +49,11 @@ public class ClientSetup {
 
     // Block tint (above) only covers the in-world block render. The held/inventory/dropped-item
     // render goes through a separate ItemColor lookup even though it's the same model - without
-    // this, the mushroom would show its real cap pattern in-world but plain white sides in hand.
+    // this, the mushroom's stems would show their real color in-world but plain white in hand.
     @SubscribeEvent
     public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
         event.register((stack, tintIndex) -> switch (tintIndex) {
-            case 0 -> TINT_BIG_CAP;
             case 1 -> TINT_BIG_STEM;
-            case 2 -> TINT_SMALL_CAP;
             case 3 -> TINT_SMALL_STEM;
             default -> 0xFFFFFF;
         }, ModBlocks.SYLVARIA_GLOW_MUSHROOM_ITEM.get());
