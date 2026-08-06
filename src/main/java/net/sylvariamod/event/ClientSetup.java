@@ -23,6 +23,11 @@ public class ClientSetup {
     public static void onClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.SYLVARIA_LEAVES.get(), RenderType.cutoutMipped());
+            // Glow mushroom uses many small elements with tiny UV rects stretched over large,
+            // steeply-angled faces. The default solid() layer samples the MIPPED block sheet,
+            // which produces visible shimmer/banding on those faces as the camera moves.
+            // cutout() uses the unmipped block sheet - same crisp look regardless of angle.
+            ItemBlockRenderTypes.setRenderLayer(ModBlocks.SYLVARIA_GLOW_MUSHROOM.get(), RenderType.cutout());
         });
     }
 

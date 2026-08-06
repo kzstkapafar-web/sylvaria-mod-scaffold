@@ -42,7 +42,11 @@ public class SylvariaGlowMushroomRenderer implements BlockEntityRenderer<Sylvari
         }
 
         int fullBright = LightTexture.pack(15, 15);
-        VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.translucent());
+        // translucent() reads the MIPPED block sheet, which visibly shimmers on this model's
+        // stretched faces as the camera moves (the "stripes on the white spots" artifact).
+        // The emissive texture is plain on/off pixel art (no soft alpha edges to blend), so the
+        // unmipped, alpha-tested cutout() sheet gives the same look without the shimmer.
+        VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.cutout());
 
         poseStack.pushPose();
         Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(
