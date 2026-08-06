@@ -35,7 +35,7 @@ public class SylvariaGlowMushroomRenderer implements BlockEntityRenderer<Sylvari
 
         BlockState state = be.getBlockState();
         BakedModel emissiveModel = Minecraft.getInstance().getModelManager()
-                .getModel(ModelResourceLocation.standalone(EMISSIVE_MODEL_LOC));
+                .getModel(new ModelResourceLocation(EMISSIVE_MODEL_LOC, "standalone"));
 
         if (emissiveModel == null) {
             return;
