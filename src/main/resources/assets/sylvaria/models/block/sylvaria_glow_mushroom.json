@@ -1,5 +1,5 @@
 {
-  "credit": "Sylvaria mod - custom glow mushroom (cap+stem 3D model)",
+  "credit": "Sylvaria mod - custom glow mushroom (big+small cluster)",
   "parent": "minecraft:block/block",
   "textures": {
     "particle": "sylvaria:block/sylvaria_glow_mushroom",
@@ -7,7 +7,7 @@
   },
   "elements": [
     {
-      "name": "stem",
+      "name": "big_stem",
       "from": [
         6,
         0,
@@ -76,16 +76,16 @@
       }
     },
     {
-      "name": "cap",
+      "name": "big_cap",
       "from": [
-        0,
+        1,
         7,
-        0
+        1
       ],
       "to": [
+        13,
         16,
-        16,
-        16
+        13
       ],
       "faces": {
         "north": {
@@ -139,6 +139,144 @@
             0,
             16,
             9
+          ],
+          "texture": "#cross"
+        }
+      }
+    },
+    {
+      "name": "small_stem",
+      "from": [
+        13,
+        0,
+        13
+      ],
+      "to": [
+        15,
+        3,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            9,
+            10,
+            12
+          ],
+          "texture": "#cross"
+        },
+        "south": {
+          "uv": [
+            6,
+            9,
+            10,
+            12
+          ],
+          "texture": "#cross"
+        },
+        "east": {
+          "uv": [
+            6,
+            9,
+            10,
+            12
+          ],
+          "texture": "#cross"
+        },
+        "west": {
+          "uv": [
+            6,
+            9,
+            10,
+            12
+          ],
+          "texture": "#cross"
+        },
+        "up": {
+          "uv": [
+            6,
+            9,
+            10,
+            11
+          ],
+          "texture": "#cross"
+        },
+        "down": {
+          "uv": [
+            6,
+            11,
+            10,
+            12
+          ],
+          "texture": "#cross"
+        }
+      }
+    },
+    {
+      "name": "small_cap",
+      "from": [
+        11,
+        3,
+        11
+      ],
+      "to": [
+        16,
+        6,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            3,
+            16,
+            6
+          ],
+          "texture": "#cross"
+        },
+        "south": {
+          "uv": [
+            0,
+            3,
+            16,
+            6
+          ],
+          "texture": "#cross"
+        },
+        "east": {
+          "uv": [
+            0,
+            3,
+            16,
+            6
+          ],
+          "texture": "#cross"
+        },
+        "west": {
+          "uv": [
+            0,
+            3,
+            16,
+            6
+          ],
+          "texture": "#cross"
+        },
+        "up": {
+          "uv": [
+            0,
+            3,
+            16,
+            6
+          ],
+          "texture": "#cross"
+        },
+        "down": {
+          "uv": [
+            0,
+            3,
+            16,
+            6
           ],
           "texture": "#cross"
         }
