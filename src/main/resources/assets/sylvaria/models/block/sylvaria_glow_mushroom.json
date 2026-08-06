@@ -1,5 +1,6 @@
 {
   "credit": "Sylvaria mod - custom glow mushroom (8-layer rounded dome, tall big + small)",
+  "ambientocclusion": false,
   "parent": "minecraft:block/block",
   "textures": {
     "particle": "sylvaria:block/sylvaria_glow_mushroom",

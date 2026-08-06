@@ -1,5 +1,6 @@
 {
   "credit": "Sylvaria mod - custom glow mushroom (emissive overlay, spot pixels only, same geometry)",
+  "ambientocclusion": false,
   "parent": "minecraft:block/block",
   "textures": {
     "particle": "sylvaria:block/sylvaria_glow_mushroom_emissive",
