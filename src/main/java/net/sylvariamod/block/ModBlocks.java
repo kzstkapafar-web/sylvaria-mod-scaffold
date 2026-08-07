@@ -112,7 +112,7 @@ public class ModBlocks {
                     .mapColor(MapColor.COLOR_PURPLE)
                     .instabreak()
                     .sound(SoundType.GRASS)
-                    .lightLevel(state -> 15)
+                    .lightLevel(state -> 7) // тускло, как редстоун-факел
                     .pushReaction(PushReaction.DESTROY)));
 
     public static final RegistryObject<Item> SYLVARIA_GLOW_MUSHROOM_ITEM = ITEMS.register("sylvaria_glow_mushroom",
@@ -125,7 +125,7 @@ public class ModBlocks {
                     .mapColor(MapColor.COLOR_PURPLE)
                     .instabreak()
                     .sound(SoundType.GRASS)
-                    .lightLevel(state -> 15)
+                    .lightLevel(state -> 7) // тускло, как редстоун-факел
                     .pushReaction(PushReaction.DESTROY)));
 
     public static final RegistryObject<Item> SYLVARIA_GLOW_MUSHROOM_BIG_ITEM = ITEMS.register("sylvaria_glow_mushroom_big",
@@ -138,7 +138,7 @@ public class ModBlocks {
                     .mapColor(MapColor.COLOR_PURPLE)
                     .instabreak()
                     .sound(SoundType.GRASS)
-                    .lightLevel(state -> 15)
+                    .lightLevel(state -> 7) // тускло, как редстоун-факел
                     .pushReaction(PushReaction.DESTROY),
                     net.minecraft.world.level.block.Block.box(4.0D, 0.0D, 4.0D, 12.0D, 7.0D, 12.0D)));
 

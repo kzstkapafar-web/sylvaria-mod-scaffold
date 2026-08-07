@@ -58,6 +58,13 @@ public class SylvariaGlowMushroomRenderer implements BlockEntityRenderer<Sylvari
         // unmipped, alpha-tested cutout() sheet gives the same look without the shimmer.
         VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.cutout());
 
+        // Приглушённый фиолетовый тон свечения (под цвет биома), а не чистый белый -
+        // умножается на цвет самой текстуры, так что даже белые точки-крапинки становятся
+        // мягким violet-свечением, без переделки самой текстуры пользователем.
+        final float GLOW_R = 0.66F;
+        final float GLOW_G = 0.42F;
+        final float GLOW_B = 0.92F;
+
         poseStack.pushPose();
         // Nudge the overlay geometry outward a hair so it isn't perfectly coplanar with the
         // base model - kills the z-fight without any visible size difference (0.4% growth,
@@ -70,7 +77,7 @@ public class SylvariaGlowMushroomRenderer implements BlockEntityRenderer<Sylvari
                 vertexConsumer,
                 state,
                 emissiveModel,
-                1.0F, 1.0F, 1.0F,
+                GLOW_R, GLOW_G, GLOW_B,
                 fullBright,
                 OverlayTexture.NO_OVERLAY
         );
