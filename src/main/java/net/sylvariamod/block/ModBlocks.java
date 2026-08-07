@@ -140,7 +140,7 @@ public class ModBlocks {
                     .sound(SoundType.GRASS)
                     .lightLevel(state -> 15)
                     .pushReaction(PushReaction.DESTROY),
-                    net.minecraft.world.level.block.Block.box(4.0D, 0.0D, 4.0D, 12.0D, 7.0D, 12.0D));
+                    net.minecraft.world.level.block.Block.box(4.0D, 0.0D, 4.0D, 12.0D, 7.0D, 12.0D)));
 
     public static final RegistryObject<Item> SYLVARIA_GLOW_MUSHROOM_SMALL_ITEM = ITEMS.register("sylvaria_glow_mushroom_small",
             () -> new BlockItem(SYLVARIA_GLOW_MUSHROOM_SMALL.get(), new Item.Properties()));
