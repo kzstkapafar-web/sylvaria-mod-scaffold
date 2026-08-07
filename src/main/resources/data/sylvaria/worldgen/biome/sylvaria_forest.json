@@ -22,9 +22,9 @@
       "replace_current_music": false
     },
     "particle": {
-      "probability": 0.01,
+      "probability": 0.015,
       "options": {
-        "type": "minecraft:warped_spore"
+        "type": "sylvaria:sylvaria_haze"
       }
     }
   },

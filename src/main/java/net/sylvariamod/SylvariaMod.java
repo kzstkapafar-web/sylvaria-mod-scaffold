@@ -5,6 +5,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.sylvariamod.block.ModBlockEntities;
 import net.sylvariamod.block.ModBlocks;
+import net.sylvariamod.particle.ModParticles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +24,7 @@ public class SylvariaMod {
         ModBlocks.BLOCKS.register(modEventBus);
         ModBlocks.ITEMS.register(modEventBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
+        ModParticles.PARTICLE_TYPES.register(modEventBus);
 
         LOGGER.info("Sylvaria mod initializing - the forest awakens");
     }

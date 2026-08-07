@@ -1,9 +1,12 @@
 package net.sylvariamod.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.sylvariamod.particle.ModParticles;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.world.level.block.Block;
@@ -93,5 +96,18 @@ public class SylvariaGlowMushroomBlock extends BaseEntityBlock {
     @Override
     public PushReaction getPistonPushReaction(BlockState state) {
         return PushReaction.DESTROY;
+    }
+
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        // Погуще, чем фоновая дымка по биому (см. worldgen/biome/sylvaria_forest.json) -
+        // подчёркивает гриб как локальный источник магии. Общий для всех 3 вариантов
+        // (пара/большой/маленький), т.к. класс блока переиспользуется на все три.
+        if (random.nextInt(3) == 0) {
+            double x = pos.getX() + 0.2D + random.nextDouble() * 0.6D;
+            double y = pos.getY() + 0.15D + random.nextDouble() * 1.2D;
+            double z = pos.getZ() + 0.2D + random.nextDouble() * 0.6D;
+            level.addParticle(ModParticles.SYLVARIA_HAZE.get(), x, y, z, 0.0D, 0.0D, 0.0D);
+        }
     }
 }
