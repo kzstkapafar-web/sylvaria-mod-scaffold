@@ -25,16 +25,27 @@ import javax.annotation.Nullable;
  * Placement rules mirror vanilla mushrooms: dirt, podzol, mycelium or moss.
  */
 public class SylvariaGlowMushroomBlock extends BaseEntityBlock {
-    // Bounding box roughly matching the model's overall extent - big mushroom is now
+    // Bounding box roughly matching the PAIRED model's overall extent - big mushroom is
     // full block height (8 stem + 8 domed cap), small one sits well below/beside it.
-    protected static final VoxelShape SHAPE = Block.box(1.0D, 0.0D, 1.0D, 16.0D, 16.0D, 16.0D);
+    // Used as the default shape when no explicit shape is passed (paired + big-only variant).
+    protected static final VoxelShape DEFAULT_SHAPE = Block.box(1.0D, 0.0D, 1.0D, 16.0D, 16.0D, 16.0D);
 
     // Required since 1.21: every BaseEntityBlock subclass must expose a codec
     // so the block can be (de)serialized. simpleCodec() just needs the constructor.
     public static final MapCodec<SylvariaGlowMushroomBlock> CODEC = simpleCodec(SylvariaGlowMushroomBlock::new);
 
+    // Per-instance shape, so the same class can serve the paired mushroom, the standalone
+    // big mushroom (both use DEFAULT_SHAPE) and the standalone small mushroom (much shorter/
+    // narrower box, passed in explicitly - see ModBlocks.SYLVARIA_GLOW_MUSHROOM_SMALL).
+    protected final VoxelShape shape;
+
     public SylvariaGlowMushroomBlock(BlockBehaviour.Properties properties) {
+        this(properties, DEFAULT_SHAPE);
+    }
+
+    public SylvariaGlowMushroomBlock(BlockBehaviour.Properties properties, VoxelShape shape) {
         super(properties);
+        this.shape = shape;
     }
 
     @Override
@@ -44,7 +55,7 @@ public class SylvariaGlowMushroomBlock extends BaseEntityBlock {
 
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return SHAPE;
+        return shape;
     }
     @Override
     protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
@@ -53,7 +64,7 @@ public class SylvariaGlowMushroomBlock extends BaseEntityBlock {
         // "гигантские цветные плашки на весь экран" на скриншотах - это не дефект
         // текстуры, а обычный вид ЛЮБОЙ грани в упор, когда камера в неё влезла).
         // Настоящая коллизия по форме модели не даёт игроку туда попасть.
-        return SHAPE;
+        return shape;
     }
     @Override
     public RenderShape getRenderShape(BlockState state) {

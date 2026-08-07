@@ -5,5 +5,7 @@
   "block.sylvaria.sylvaria_stripped_log": "Stripped Sylvaria Log",
   "block.sylvaria.sylvaria_planks": "Sylvaria Planks",
   "block.sylvaria.sylvaria_leaves": "Sylvaria Leaves",
-  "block.sylvaria.sylvaria_glow_mushroom": "Glowing Mushroom"
+  "block.sylvaria.sylvaria_glow_mushroom": "Glowing Mushroom Pair",
+  "block.sylvaria.sylvaria_glow_mushroom_big": "Large Glowing Mushroom",
+  "block.sylvaria.sylvaria_glow_mushroom_small": "Small Glowing Mushroom"
 }

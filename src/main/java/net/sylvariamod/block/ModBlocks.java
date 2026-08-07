@@ -117,4 +117,31 @@ public class ModBlocks {
 
     public static final RegistryObject<Item> SYLVARIA_GLOW_MUSHROOM_ITEM = ITEMS.register("sylvaria_glow_mushroom",
             () -> new BlockItem(SYLVARIA_GLOW_MUSHROOM.get(), new Item.Properties()));
+
+    // Standalone big mushroom - just the big cap+stem from the paired model, on its own.
+    // Reuses the same full-block hitbox as the paired block (big mushroom already spans it).
+    public static final RegistryObject<Block> SYLVARIA_GLOW_MUSHROOM_BIG = BLOCKS.register("sylvaria_glow_mushroom_big",
+            () -> new net.sylvariamod.block.SylvariaGlowMushroomBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_PURPLE)
+                    .instabreak()
+                    .sound(SoundType.GRASS)
+                    .lightLevel(state -> 15)
+                    .pushReaction(PushReaction.DESTROY)));
+
+    public static final RegistryObject<Item> SYLVARIA_GLOW_MUSHROOM_BIG_ITEM = ITEMS.register("sylvaria_glow_mushroom_big",
+            () -> new BlockItem(SYLVARIA_GLOW_MUSHROOM_BIG.get(), new Item.Properties()));
+
+    // Standalone small mushroom - just the small cap+stem, recentered in the block, with a
+    // much shorter/narrower hitbox matching its actual size instead of a full-block box.
+    public static final RegistryObject<Block> SYLVARIA_GLOW_MUSHROOM_SMALL = BLOCKS.register("sylvaria_glow_mushroom_small",
+            () -> new net.sylvariamod.block.SylvariaGlowMushroomBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_PURPLE)
+                    .instabreak()
+                    .sound(SoundType.GRASS)
+                    .lightLevel(state -> 15)
+                    .pushReaction(PushReaction.DESTROY),
+                    net.minecraft.world.level.block.Block.box(4.0D, 0.0D, 4.0D, 12.0D, 7.0D, 12.0D));
+
+    public static final RegistryObject<Item> SYLVARIA_GLOW_MUSHROOM_SMALL_ITEM = ITEMS.register("sylvaria_glow_mushroom_small",
+            () -> new BlockItem(SYLVARIA_GLOW_MUSHROOM_SMALL.get(), new Item.Properties()));
 }

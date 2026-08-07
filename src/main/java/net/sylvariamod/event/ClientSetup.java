@@ -44,7 +44,9 @@ public class ClientSetup {
             case 1 -> TINT_BIG_STEM;
             case 3 -> TINT_SMALL_STEM;
             default -> 0xFFFFFF;
-        }, ModBlocks.SYLVARIA_GLOW_MUSHROOM.get());
+        }, ModBlocks.SYLVARIA_GLOW_MUSHROOM.get(),
+           ModBlocks.SYLVARIA_GLOW_MUSHROOM_BIG.get(),
+           ModBlocks.SYLVARIA_GLOW_MUSHROOM_SMALL.get());
     }
 
     // Block tint (above) only covers the in-world block render. The held/inventory/dropped-item
@@ -56,7 +58,9 @@ public class ClientSetup {
             case 1 -> TINT_BIG_STEM;
             case 3 -> TINT_SMALL_STEM;
             default -> 0xFFFFFF;
-        }, ModBlocks.SYLVARIA_GLOW_MUSHROOM_ITEM.get());
+        }, ModBlocks.SYLVARIA_GLOW_MUSHROOM_ITEM.get(),
+           ModBlocks.SYLVARIA_GLOW_MUSHROOM_BIG_ITEM.get(),
+           ModBlocks.SYLVARIA_GLOW_MUSHROOM_SMALL_ITEM.get());
     }
 
     @SubscribeEvent
@@ -68,6 +72,8 @@ public class ClientSetup {
             // which produces visible shimmer/banding on those faces as the camera moves.
             // cutout() uses the unmipped block sheet - same crisp look regardless of angle.
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.SYLVARIA_GLOW_MUSHROOM.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocks.SYLVARIA_GLOW_MUSHROOM_BIG.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocks.SYLVARIA_GLOW_MUSHROOM_SMALL.get(), RenderType.cutout());
         });
     }
 
@@ -84,8 +90,14 @@ public class ClientSetup {
     // being drawn on top of the real, correctly-textured mushroom model.
     @SubscribeEvent
     public static void onRegisterAdditional(ModelEvent.RegisterAdditional event) {
-        event.register(new ModelResourceLocation(
-                ResourceLocation.fromNamespaceAndPath(SylvariaMod.MODID, "block/sylvaria_glow_mushroom_emissive"),
-                "standalone"));
+        for (String path : new String[] {
+                "block/sylvaria_glow_mushroom_emissive",
+                "block/sylvaria_glow_mushroom_big_emissive",
+                "block/sylvaria_glow_mushroom_small_emissive"
+        }) {
+            event.register(new ModelResourceLocation(
+                    ResourceLocation.fromNamespaceAndPath(SylvariaMod.MODID, path),
+                    "standalone"));
+        }
     }
 }

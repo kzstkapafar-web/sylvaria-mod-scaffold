@@ -5,5 +5,7 @@
   "block.sylvaria.sylvaria_stripped_log": "Обтёсанное бревно сильварии",
   "block.sylvaria.sylvaria_planks": "Доски сильварии",
   "block.sylvaria.sylvaria_leaves": "Листва сильварии",
-  "block.sylvaria.sylvaria_glow_mushroom": "Светящийся гриб"
+  "block.sylvaria.sylvaria_glow_mushroom": "Светящиеся грибы (пара)",
+  "block.sylvaria.sylvaria_glow_mushroom_big": "Большой светящийся гриб",
+  "block.sylvaria.sylvaria_glow_mushroom_small": "Маленький светящийся гриб"
 }

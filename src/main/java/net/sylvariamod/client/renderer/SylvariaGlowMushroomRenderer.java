@@ -29,9 +29,6 @@ import net.sylvariamod.block.entity.SylvariaGlowMushroomBlockEntity;
  */
 public class SylvariaGlowMushroomRenderer implements BlockEntityRenderer<SylvariaGlowMushroomBlockEntity> {
 
-    private static final ResourceLocation EMISSIVE_MODEL_LOC =
-            ResourceLocation.fromNamespaceAndPath("sylvaria", "block/sylvaria_glow_mushroom_emissive");
-
     public SylvariaGlowMushroomRenderer(BlockEntityRendererProvider.Context context) {
     }
 
@@ -40,8 +37,15 @@ public class SylvariaGlowMushroomRenderer implements BlockEntityRenderer<Sylvari
                         MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
 
         BlockState state = be.getBlockState();
+        // Один рендерер обслуживает все варианты гриба (пара/большой/маленький) - вместо
+        // захардкоженного пути к одной эмиссивной модели берём ID самого блока и достраиваем
+        // "<путь_блока>_emissive" - так работает для sylvaria_glow_mushroom(_big/_small).
+        net.minecraft.resources.ResourceLocation blockId =
+                net.minecraftforge.registries.ForgeRegistries.BLOCKS.getKey(state.getBlock());
+        ResourceLocation emissiveModelLoc = ResourceLocation.fromNamespaceAndPath(
+                blockId.getNamespace(), "block/" + blockId.getPath() + "_emissive");
         BakedModel emissiveModel = Minecraft.getInstance().getModelManager()
-                .getModel(new ModelResourceLocation(EMISSIVE_MODEL_LOC, "standalone"));
+                .getModel(new ModelResourceLocation(emissiveModelLoc, "standalone"));
 
         if (emissiveModel == null) {
             return;
