@@ -25,8 +25,11 @@ import net.sylvariamod.particle.ModParticles;
 @Mod.EventBusSubscriber(modid = SylvariaMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class SylvariaHazeSpawner {
 
-    private static final int RADIUS = 12;
-    private static final int ATTEMPTS_PER_TICK = 2;
+    // Радиус в блоках вокруг игрока, где может появиться частица - раньше было 12 (туман был
+    // виден буквально только под ногами), теперь ближе к реальной дальности обзора, чтобы
+    // дымка ощущалась как эффект всего биома, а не пятно вокруг игрока.
+    private static final int RADIUS = 28;
+    private static final int ATTEMPTS_PER_TICK = 6;
 
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
@@ -38,16 +41,20 @@ public class SylvariaHazeSpawner {
         if (player == null || level == null) return;
 
         BlockPos playerPos = player.blockPosition();
-        if (!isSylvariaForest(level, playerPos)) return;
+        if (!isSylvariaBiome(level, playerPos)) return;
 
         var random = level.random;
         for (int i = 0; i < ATTEMPTS_PER_TICK; i++) {
-            if (random.nextFloat() > 0.35F) continue;
+            if (random.nextFloat() > 0.5F) continue;
 
             int dx = random.nextInt(RADIUS * 2) - RADIUS;
             int dz = random.nextInt(RADIUS * 2) - RADIUS;
             int x = playerPos.getX() + dx;
             int z = playerPos.getZ() + dz;
+
+            // Точку тоже проверяем на биом - радиус большой, игрок может стоять у самой
+            // границы биома, и без этого дымка вылезала бы за пределы леса.
+            if (!isSylvariaBiome(level, new BlockPos(x, playerPos.getY(), z))) continue;
 
             // MOTION_BLOCKING_NO_LEAVES игнорирует листву - находит именно землю под кроной,
             // а не верх дерева, так что туман не зависает в воздухе на высоте веток.
@@ -66,7 +73,7 @@ public class SylvariaHazeSpawner {
 
             // Игрок не должен быть слишком далеко по высоте (не спавним у него под ногами в
             // случае резкого перепада рельефа за пределами реального радиуса видимости).
-            if (Math.abs(surfaceY - playerPos.getY()) > 24) continue;
+            if (Math.abs(surfaceY - playerPos.getY()) > 32) continue;
 
             double px = x + 0.5D + (random.nextDouble() - 0.5D) * 0.8D;
             double py = surfaceY + 0.05D + random.nextDouble() * 0.35D;
@@ -76,9 +83,12 @@ public class SylvariaHazeSpawner {
         }
     }
 
-    private static boolean isSylvariaForest(ClientLevel level, BlockPos pos) {
+    // По неймспейсу мода, а не по точному имени файла биома - надёжнее (сработает для
+    // sylvaria_forest и для любого другого биома мода, если такой появится) и защищено
+    // от несовпадения из-за формата ключа/пути.
+    private static boolean isSylvariaBiome(ClientLevel level, BlockPos pos) {
         return level.getBiome(pos).unwrapKey()
-                .map(key -> key.location().toString().equals("sylvaria:sylvaria_forest"))
+                .map(key -> key.location().getNamespace().equals(SylvariaMod.MODID))
                 .orElse(false);
     }
 
