@@ -24,12 +24,14 @@ public class SylvariaHazeParticle extends TextureSheetParticle {
     private static final float BASE_B = 0.92F;
     private static final float MAX_ALPHA = 0.35F;
 
+    private final SpriteSet spriteSet;
+
     private final float targetAlpha;
 
     protected SylvariaHazeParticle(ClientLevel level, double x, double y, double z,
                                     double dx, double dy, double dz, SpriteSet sprites) {
         super(level, x, y, z, dx, dy, dz);
-        this.sprites = sprites;
+        this.spriteSet = sprites;
         this.hasPhysics = false;
         this.gravity = 0.0F;
         this.friction = 1.0F;
@@ -49,14 +51,14 @@ public class SylvariaHazeParticle extends TextureSheetParticle {
         this.targetAlpha = MAX_ALPHA * (0.6F + this.random.nextFloat() * 0.4F);
         this.alpha = 0.0F;
 
-        this.setSpriteFromAge(sprites);
+        this.setSpriteFromAge(spriteSet);
     }
 
     @Override
     public void tick() {
         super.tick();
         if (!this.removed) {
-            this.setSpriteFromAge(this.sprites);
+            this.setSpriteFromAge(this.spriteSet);
             float lifeRatio = (float) this.age / (float) this.lifetime;
             // Плавно нарастаем первые 25% жизни, держим пик, плавно гаснем последние 40%.
             if (lifeRatio < 0.25F) {
