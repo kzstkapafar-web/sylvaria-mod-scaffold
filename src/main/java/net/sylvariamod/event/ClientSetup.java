@@ -82,6 +82,7 @@ public class ClientSetup {
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.SYLVARIA_GLOW_MUSHROOM.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.SYLVARIA_GLOW_MUSHROOM_BIG.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.SYLVARIA_GLOW_MUSHROOM_SMALL.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocks.SYLVARIA_GLOW_CRYSTAL.get(), RenderType.cutout());
         });
     }
 
@@ -109,7 +110,8 @@ public class ClientSetup {
         for (String path : new String[] {
                 "block/sylvaria_glow_mushroom_emissive",
                 "block/sylvaria_glow_mushroom_big_emissive",
-                "block/sylvaria_glow_mushroom_small_emissive"
+                "block/sylvaria_glow_mushroom_small_emissive",
+                "block/sylvaria_glow_crystal_emissive"
         }) {
             event.register(new ModelResourceLocation(
                     ResourceLocation.fromNamespaceAndPath(SylvariaMod.MODID, path),

@@ -1,0 +1,877 @@
+{
+  "credit": "Sylvaria mod - glowing turquoise needle cluster (emissive overlay, same geometry)",
+  "ambientocclusion": false,
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "sylvaria:block/sylvaria_glow_crystal_emissive",
+    "cross": "sylvaria:block/sylvaria_glow_crystal_emissive"
+  },
+  "elements": [
+    {
+      "name": "base_0",
+      "from": [
+        5,
+        0,
+        5
+      ],
+      "to": [
+        13,
+        1.2,
+        13
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.25,
+            6.875,
+            12.25,
+            7.3125
+          ],
+          "texture": "#cross"
+        },
+        "south": {
+          "uv": [
+            0.25,
+            6.875,
+            12.25,
+            7.3125
+          ],
+          "texture": "#cross"
+        },
+        "east": {
+          "uv": [
+            0.25,
+            6.875,
+            12.25,
+            7.3125
+          ],
+          "texture": "#cross"
+        },
+        "west": {
+          "uv": [
+            0.25,
+            6.875,
+            12.25,
+            7.3125
+          ],
+          "texture": "#cross"
+        },
+        "up": {
+          "uv": [
+            0.25,
+            0.0625,
+            12.25,
+            3.0625
+          ],
+          "texture": "#cross"
+        }
+      }
+    },
+    {
+      "name": "base_1",
+      "from": [
+        6,
+        1.2,
+        6
+      ],
+      "to": [
+        12,
+        1.8,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.25,
+            7.9375,
+            9.25,
+            8.1875
+          ],
+          "texture": "#cross"
+        },
+        "south": {
+          "uv": [
+            0.25,
+            7.9375,
+            9.25,
+            8.1875
+          ],
+          "texture": "#cross"
+        },
+        "east": {
+          "uv": [
+            0.25,
+            7.9375,
+            9.25,
+            8.1875
+          ],
+          "texture": "#cross"
+        },
+        "west": {
+          "uv": [
+            0.25,
+            7.9375,
+            9.25,
+            8.1875
+          ],
+          "texture": "#cross"
+        },
+        "up": {
+          "uv": [
+            0.25,
+            3.1875,
+            9.25,
+            5.4375
+          ],
+          "texture": "#cross"
+        }
+      }
+    },
+    {
+      "name": "needle_a_lower",
+      "from": [
+        7,
+        1.8,
+        7
+      ],
+      "to": [
+        8.0,
+        5.024,
+        8.0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.25,
+            5.5625,
+            1.75,
+            6.75
+          ],
+          "texture": "#cross"
+        },
+        "south": {
+          "uv": [
+            0.25,
+            5.5625,
+            1.75,
+            6.75
+          ],
+          "texture": "#cross"
+        },
+        "east": {
+          "uv": [
+            0.25,
+            5.5625,
+            1.75,
+            6.75
+          ],
+          "texture": "#cross"
+        },
+        "west": {
+          "uv": [
+            0.25,
+            5.5625,
+            1.75,
+            6.75
+          ],
+          "texture": "#cross"
+        }
+      }
+    },
+    {
+      "name": "needle_a_upper",
+      "from": [
+        7,
+        5.024,
+        7
+      ],
+      "to": [
+        8.0,
+        7.0,
+        8.0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.25,
+            5.5625,
+            7.75,
+            6.3125
+          ],
+          "texture": "#cross"
+        },
+        "south": {
+          "uv": [
+            6.25,
+            5.5625,
+            7.75,
+            6.3125
+          ],
+          "texture": "#cross"
+        },
+        "east": {
+          "uv": [
+            6.25,
+            5.5625,
+            7.75,
+            6.3125
+          ],
+          "texture": "#cross"
+        },
+        "west": {
+          "uv": [
+            6.25,
+            5.5625,
+            7.75,
+            6.3125
+          ],
+          "texture": "#cross"
+        },
+        "up": {
+          "uv": [
+            0.25,
+            7.4375,
+            1.75,
+            7.8125
+          ],
+          "texture": "#cross"
+        }
+      }
+    },
+    {
+      "name": "needle_b_lower",
+      "from": [
+        9,
+        1.8,
+        9
+      ],
+      "to": [
+        10.0,
+        6.574,
+        10.0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9.75,
+            3.1875,
+            11.25,
+            5.0
+          ],
+          "texture": "#cross"
+        },
+        "south": {
+          "uv": [
+            9.75,
+            3.1875,
+            11.25,
+            5.0
+          ],
+          "texture": "#cross"
+        },
+        "east": {
+          "uv": [
+            9.75,
+            3.1875,
+            11.25,
+            5.0
+          ],
+          "texture": "#cross"
+        },
+        "west": {
+          "uv": [
+            9.75,
+            3.1875,
+            11.25,
+            5.0
+          ],
+          "texture": "#cross"
+        }
+      },
+      "rotation": {
+        "origin": [
+          9.5,
+          1.8,
+          9.5
+        ],
+        "axis": "z",
+        "angle": -22.5,
+        "rescale": false
+      }
+    },
+    {
+      "name": "needle_b_upper",
+      "from": [
+        9,
+        6.574,
+        9
+      ],
+      "to": [
+        10.0,
+        9.5,
+        10.0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2.25,
+            5.5625,
+            3.75,
+            6.6875
+          ],
+          "texture": "#cross"
+        },
+        "south": {
+          "uv": [
+            2.25,
+            5.5625,
+            3.75,
+            6.6875
+          ],
+          "texture": "#cross"
+        },
+        "east": {
+          "uv": [
+            2.25,
+            5.5625,
+            3.75,
+            6.6875
+          ],
+          "texture": "#cross"
+        },
+        "west": {
+          "uv": [
+            2.25,
+            5.5625,
+            3.75,
+            6.6875
+          ],
+          "texture": "#cross"
+        },
+        "up": {
+          "uv": [
+            2.25,
+            7.4375,
+            3.75,
+            7.8125
+          ],
+          "texture": "#cross"
+        }
+      },
+      "rotation": {
+        "origin": [
+          9.5,
+          1.8,
+          9.5
+        ],
+        "axis": "z",
+        "angle": -22.5,
+        "rescale": false
+      }
+    },
+    {
+      "name": "needle_c_lower",
+      "from": [
+        6,
+        1.2,
+        10
+      ],
+      "to": [
+        7.0,
+        3.556,
+        11.0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4.25,
+            5.5625,
+            5.75,
+            6.4375
+          ],
+          "texture": "#cross"
+        },
+        "south": {
+          "uv": [
+            4.25,
+            5.5625,
+            5.75,
+            6.4375
+          ],
+          "texture": "#cross"
+        },
+        "east": {
+          "uv": [
+            4.25,
+            5.5625,
+            5.75,
+            6.4375
+          ],
+          "texture": "#cross"
+        },
+        "west": {
+          "uv": [
+            4.25,
+            5.5625,
+            5.75,
+            6.4375
+          ],
+          "texture": "#cross"
+        }
+      },
+      "rotation": {
+        "origin": [
+          6.5,
+          1.2,
+          10.5
+        ],
+        "axis": "x",
+        "angle": 22.5,
+        "rescale": false
+      }
+    },
+    {
+      "name": "needle_c_upper",
+      "from": [
+        6,
+        3.556,
+        10
+      ],
+      "to": [
+        7.0,
+        5.0,
+        11.0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            12.25,
+            5.5625,
+            13.75,
+            6.125
+          ],
+          "texture": "#cross"
+        },
+        "south": {
+          "uv": [
+            12.25,
+            5.5625,
+            13.75,
+            6.125
+          ],
+          "texture": "#cross"
+        },
+        "east": {
+          "uv": [
+            12.25,
+            5.5625,
+            13.75,
+            6.125
+          ],
+          "texture": "#cross"
+        },
+        "west": {
+          "uv": [
+            12.25,
+            5.5625,
+            13.75,
+            6.125
+          ],
+          "texture": "#cross"
+        },
+        "up": {
+          "uv": [
+            4.25,
+            7.4375,
+            5.75,
+            7.8125
+          ],
+          "texture": "#cross"
+        }
+      },
+      "rotation": {
+        "origin": [
+          6.5,
+          1.2,
+          10.5
+        ],
+        "axis": "x",
+        "angle": 22.5,
+        "rescale": false
+      }
+    },
+    {
+      "name": "needle_d_lower",
+      "from": [
+        10,
+        1.2,
+        6
+      ],
+      "to": [
+        11.0,
+        4.486,
+        7.0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            13.75,
+            3.1875,
+            15.25,
+            4.4375
+          ],
+          "texture": "#cross"
+        },
+        "south": {
+          "uv": [
+            13.75,
+            3.1875,
+            15.25,
+            4.4375
+          ],
+          "texture": "#cross"
+        },
+        "east": {
+          "uv": [
+            13.75,
+            3.1875,
+            15.25,
+            4.4375
+          ],
+          "texture": "#cross"
+        },
+        "west": {
+          "uv": [
+            13.75,
+            3.1875,
+            15.25,
+            4.4375
+          ],
+          "texture": "#cross"
+        }
+      },
+      "rotation": {
+        "origin": [
+          10.5,
+          1.2,
+          6.5
+        ],
+        "axis": "x",
+        "angle": -22.5,
+        "rescale": false
+      }
+    },
+    {
+      "name": "needle_d_upper",
+      "from": [
+        10,
+        4.486,
+        6
+      ],
+      "to": [
+        11.0,
+        6.5,
+        7.0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8.25,
+            5.5625,
+            9.75,
+            6.3125
+          ],
+          "texture": "#cross"
+        },
+        "south": {
+          "uv": [
+            8.25,
+            5.5625,
+            9.75,
+            6.3125
+          ],
+          "texture": "#cross"
+        },
+        "east": {
+          "uv": [
+            8.25,
+            5.5625,
+            9.75,
+            6.3125
+          ],
+          "texture": "#cross"
+        },
+        "west": {
+          "uv": [
+            8.25,
+            5.5625,
+            9.75,
+            6.3125
+          ],
+          "texture": "#cross"
+        },
+        "up": {
+          "uv": [
+            6.25,
+            7.4375,
+            7.75,
+            7.8125
+          ],
+          "texture": "#cross"
+        }
+      },
+      "rotation": {
+        "origin": [
+          10.5,
+          1.2,
+          6.5
+        ],
+        "axis": "x",
+        "angle": -22.5,
+        "rescale": false
+      }
+    },
+    {
+      "name": "needle_e_lower",
+      "from": [
+        8,
+        1.8,
+        11
+      ],
+      "to": [
+        9.0,
+        8.124,
+        12.0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            12.75,
+            0.0625,
+            14.25,
+            2.4375
+          ],
+          "texture": "#cross"
+        },
+        "south": {
+          "uv": [
+            12.75,
+            0.0625,
+            14.25,
+            2.4375
+          ],
+          "texture": "#cross"
+        },
+        "east": {
+          "uv": [
+            12.75,
+            0.0625,
+            14.25,
+            2.4375
+          ],
+          "texture": "#cross"
+        },
+        "west": {
+          "uv": [
+            12.75,
+            0.0625,
+            14.25,
+            2.4375
+          ],
+          "texture": "#cross"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8.5,
+          1.8,
+          11.5
+        ],
+        "axis": "z",
+        "angle": 22.5,
+        "rescale": false
+      }
+    },
+    {
+      "name": "needle_e_upper",
+      "from": [
+        8,
+        8.124,
+        11
+      ],
+      "to": [
+        9.0,
+        12.0,
+        12.0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            11.75,
+            3.1875,
+            13.25,
+            4.625
+          ],
+          "texture": "#cross"
+        },
+        "south": {
+          "uv": [
+            11.75,
+            3.1875,
+            13.25,
+            4.625
+          ],
+          "texture": "#cross"
+        },
+        "east": {
+          "uv": [
+            11.75,
+            3.1875,
+            13.25,
+            4.625
+          ],
+          "texture": "#cross"
+        },
+        "west": {
+          "uv": [
+            11.75,
+            3.1875,
+            13.25,
+            4.625
+          ],
+          "texture": "#cross"
+        },
+        "up": {
+          "uv": [
+            8.25,
+            7.4375,
+            9.75,
+            7.8125
+          ],
+          "texture": "#cross"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8.5,
+          1.8,
+          11.5
+        ],
+        "axis": "z",
+        "angle": 22.5,
+        "rescale": false
+      }
+    },
+    {
+      "name": "needle_f_lower",
+      "from": [
+        11,
+        1.2,
+        9
+      ],
+      "to": [
+        12.0,
+        3.0599999999999996,
+        10.0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10.25,
+            5.5625,
+            11.75,
+            6.25
+          ],
+          "texture": "#cross"
+        },
+        "south": {
+          "uv": [
+            10.25,
+            5.5625,
+            11.75,
+            6.25
+          ],
+          "texture": "#cross"
+        },
+        "east": {
+          "uv": [
+            10.25,
+            5.5625,
+            11.75,
+            6.25
+          ],
+          "texture": "#cross"
+        },
+        "west": {
+          "uv": [
+            10.25,
+            5.5625,
+            11.75,
+            6.25
+          ],
+          "texture": "#cross"
+        }
+      }
+    },
+    {
+      "name": "needle_f_upper",
+      "from": [
+        11,
+        3.0599999999999996,
+        9
+      ],
+      "to": [
+        12.0,
+        4.2,
+        10.0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            12.75,
+            6.875,
+            14.25,
+            7.3125
+          ],
+          "texture": "#cross"
+        },
+        "south": {
+          "uv": [
+            12.75,
+            6.875,
+            14.25,
+            7.3125
+          ],
+          "texture": "#cross"
+        },
+        "east": {
+          "uv": [
+            12.75,
+            6.875,
+            14.25,
+            7.3125
+          ],
+          "texture": "#cross"
+        },
+        "west": {
+          "uv": [
+            12.75,
+            6.875,
+            14.25,
+            7.3125
+          ],
+          "texture": "#cross"
+        },
+        "up": {
+          "uv": [
+            10.25,
+            7.4375,
+            11.75,
+            7.8125
+          ],
+          "texture": "#cross"
+        }
+      }
+    }
+  ]
+}

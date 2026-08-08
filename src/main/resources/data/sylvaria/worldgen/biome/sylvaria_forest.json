@@ -60,7 +60,8 @@
       "minecraft:patch_grass_forest",
       "minecraft:brown_mushroom_normal",
       "minecraft:red_mushroom_normal",
-      "sylvaria:sylvaria_glow_mushroom_patch"
+      "sylvaria:sylvaria_glow_mushroom_patch",
+      "sylvaria:sylvaria_glow_crystal_patch"
     ],
     [
       "minecraft:freeze_top_layer"
