@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:random_patch",
+  "config": {
+    "tries": 1,
+    "xz_spread": 1,
+    "y_spread": 1,
+    "feature": {
+      "feature": {
+        "type": "minecraft:simple_block",
+        "config": {
+          "to_place": {
+            "type": "minecraft:weighted_state_provider",
+            "entries": [
+              { "data": { "Name": "sylvaria:sylvaria_glow_mushroom_small" }, "weight": 5 },
+              { "data": { "Name": "sylvaria:sylvaria_glow_mushroom_big" }, "weight": 3 },
+              { "data": { "Name": "sylvaria:sylvaria_glow_mushroom" }, "weight": 2 }
+            ]
+          }
+        }
+      },
+      "placement": [
+        { "type": "minecraft:block_predicate_filter", "predicate": { "type": "minecraft:matching_blocks", "blocks": "minecraft:air", "offset": [0, 0, 0] } },
+        { "type": "minecraft:block_predicate_filter", "predicate": { "type": "minecraft:matching_blocks", "blocks": "minecraft:air", "offset": [0, 1, 0] } },
+        { "type": "minecraft:block_predicate_filter", "predicate": { "type": "minecraft:matching_blocks", "blocks": ["minecraft:dirt","minecraft:podzol","minecraft:mycelium","minecraft:moss_block","minecraft:grass_block"], "offset": [0, -1, 0] } }
+      ]
+    }
+  }
+}

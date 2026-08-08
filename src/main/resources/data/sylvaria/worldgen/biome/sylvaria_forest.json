@@ -51,7 +51,8 @@
       "minecraft:ore_copper"
     ],
     [
-      "sylvaria:sylvaria_glow_crystal_cave_patch"
+      "sylvaria:sylvaria_glow_crystal_cave_single",
+      "sylvaria:sylvaria_glow_crystal_cave_cluster"
     ],
     [
       "minecraft:spring_water"
@@ -62,8 +63,10 @@
       "minecraft:patch_grass_forest",
       "minecraft:brown_mushroom_normal",
       "minecraft:red_mushroom_normal",
-      "sylvaria:sylvaria_glow_mushroom_patch",
-      "sylvaria:sylvaria_glow_crystal_patch"
+      "sylvaria:sylvaria_glow_mushroom_single",
+      "sylvaria:sylvaria_glow_mushroom_cluster",
+      "sylvaria:sylvaria_glow_crystal_single",
+      "sylvaria:sylvaria_glow_crystal_cluster"
     ],
     [
       "minecraft:freeze_top_layer"
