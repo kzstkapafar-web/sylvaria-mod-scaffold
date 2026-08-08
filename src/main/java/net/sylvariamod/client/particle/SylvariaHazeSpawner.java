@@ -42,7 +42,7 @@ public class SylvariaHazeSpawner {
     private static boolean loggedOnce = false;
     private static int frameCounter = 0;
     private static int rejectedDimension = 0;
-    private static int rejectedHeightDiff = 0;
+    private static int rejectedChunkUnloaded = 0;
     private static int rejectedNotAir = 0;
     private static int rejectedFluid = 0;
     private static int spawnedCount = 0;
@@ -90,14 +90,19 @@ public class SylvariaHazeSpawner {
             int x = playerPos.getX() + dx;
             int z = playerPos.getZ() + dz;
 
+            // КЛЮЧЕВОЙ ФИКС: если чанк ещё не загружен/не догенерирован (а на свежей
+            // территории Sylvaria так почти всегда и есть в радиусе 28 блоков), getHeight
+            // отдаёт мусорное значение высоты, никак не связанное с реальным рельефом - именно
+            // поэтому "отклонено по высоте" забирало 100% попыток. Пропускаем такие чанки
+            // вместо того, чтобы вообще запрашивать по ним высоту.
+            if (!level.hasChunk(x >> 4, z >> 4)) {
+                rejectedChunkUnloaded++;
+                continue;
+            }
+
             // MOTION_BLOCKING_NO_LEAVES игнорирует листву - это высота именно земли/травы,
             // а не верхушки дерева, от неё и откладываем высоту полёта частицы.
             int surfaceY = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
-
-            if (Math.abs(surfaceY - playerPos.getY()) > 32) {
-                rejectedHeightDiff++;
-                continue;
-            }
 
             double heightAboveGround = MIN_HEIGHT_ABOVE_GROUND
                     + random.nextDouble() * (MAX_HEIGHT_ABOVE_GROUND - MIN_HEIGHT_ABOVE_GROUND);
@@ -125,10 +130,10 @@ public class SylvariaHazeSpawner {
         }
 
         if (printSummary) {
-            SylvariaMod.LOGGER.info("[Sylvaria] СВОДКА: измерение OK ({}). За интервал заспавнено={}, отклонено по высоте={}, отклонено (не воздух)={}, отклонено (жидкость)={}. Игрок y={}",
-                    level.dimension().location(), spawnedCount, rejectedHeightDiff, rejectedNotAir, rejectedFluid, playerPos.getY());
+            SylvariaMod.LOGGER.info("[Sylvaria] СВОДКА: измерение OK ({}). За интервал заспавнено={}, отклонено (чанк не загружен)={}, отклонено (не воздух)={}, отклонено (жидкость)={}. Игрок y={}",
+                    level.dimension().location(), spawnedCount, rejectedChunkUnloaded, rejectedNotAir, rejectedFluid, playerPos.getY());
             spawnedCount = 0;
-            rejectedHeightDiff = 0;
+            rejectedChunkUnloaded = 0;
             rejectedNotAir = 0;
             rejectedFluid = 0;
         }
