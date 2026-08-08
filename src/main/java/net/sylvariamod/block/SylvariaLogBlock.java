@@ -45,19 +45,23 @@ public class SylvariaLogBlock extends RotatedPillarBlock {
 
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-        if (random.nextInt(4) != 0) return;
         if (!hasNaturalCanopyNearby(level, pos)) return;
 
-        // Точка берётся в объёме, примерно повторяющем силуэт дерева (от ствола до кроны
-        // над ним) - споры кружат вокруг всего дерева, а не сыпятся с одного конкретного листа.
-        double x = pos.getX() + 0.5D + (random.nextDouble() - 0.5D) * 3.0D;
-        double y = pos.getY() + random.nextDouble() * 7.0D;
-        double z = pos.getZ() + 0.5D + (random.nextDouble() - 0.5D) * 3.0D;
+        // Спавним пачкой (3-5 штук) за один вызов вместо одной, чтобы вокруг дерева
+        // ощущалось реальное облако спор, а не редкие одиночные точки.
+        int count = 3 + random.nextInt(3);
+        for (int i = 0; i < count; i++) {
+            // Точка берётся в объёме, примерно повторяющем силуэт дерева (от ствола до кроны
+            // над ним) - споры кружат вокруг всего дерева, а не сыпятся с одного листа.
+            double x = pos.getX() + 0.5D + (random.nextDouble() - 0.5D) * 3.0D;
+            double y = pos.getY() + random.nextDouble() * 7.0D;
+            double z = pos.getZ() + 0.5D + (random.nextDouble() - 0.5D) * 3.0D;
 
-        BlockPos target = BlockPos.containing(x, y, z);
-        if (!level.getBlockState(target).isAir()) return;
+            BlockPos target = BlockPos.containing(x, y, z);
+            if (!level.getBlockState(target).isAir()) continue;
 
-        level.addParticle(ModParticles.SYLVARIA_HAZE.get(), x, y, z, 0.0D, 0.0D, 0.0D);
+            level.addParticle(ModParticles.SYLVARIA_HAZE.get(), x, y, z, 0.0D, 0.0D, 0.0D);
+        }
     }
 
     // Ищем поблизости хотя бы один блок нашей листвы с PERSISTENT=false (значит натуральный,

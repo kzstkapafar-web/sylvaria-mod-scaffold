@@ -100,14 +100,17 @@ public class SylvariaGlowMushroomBlock extends BaseEntityBlock {
 
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-        // Погуще, чем фоновый рой искр по биому (см. SylvariaHazeSpawner) - подчёркивает
-        // гриб как локальный источник магии. Общий для всех 3 вариантов (пара/большой/
-        // маленький), т.к. класс блока переиспользуется на все три.
-        if (random.nextInt(3) == 0) {
-            double x = pos.getX() + 0.2D + random.nextDouble() * 0.6D;
-            double y = pos.getY() + 0.15D + random.nextDouble() * 1.2D;
-            double z = pos.getZ() + 0.2D + random.nextDouble() * 0.6D;
-            level.addParticle(ModParticles.SYLVARIA_HAZE.get(), x, y, z, 0.0D, 0.0D, 0.0D);
+        // Погуще, чем у дерева (см. SylvariaLogBlock) - подчёркивает гриб как локальный
+        // источник магии. Общий для всех 3 вариантов (пара/большой/маленький), т.к. класс
+        // блока переиспользуется на все три.
+        if (random.nextInt(2) == 0) {
+            int count = 1 + random.nextInt(2);
+            for (int i = 0; i < count; i++) {
+                double x = pos.getX() + 0.2D + random.nextDouble() * 0.6D;
+                double y = pos.getY() + 0.15D + random.nextDouble() * 1.2D;
+                double z = pos.getZ() + 0.2D + random.nextDouble() * 0.6D;
+                level.addParticle(ModParticles.SYLVARIA_HAZE.get(), x, y, z, 0.0D, 0.0D, 0.0D);
+            }
         }
     }
 }
