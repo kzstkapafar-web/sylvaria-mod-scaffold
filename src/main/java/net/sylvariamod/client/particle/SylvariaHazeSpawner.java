@@ -7,10 +7,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.sylvariamod.SylvariaMod;
 import net.sylvariamod.particle.ModParticles;
 
@@ -20,33 +18,50 @@ import net.sylvariamod.particle.ModParticles;
  * из-под земли/воды", см. историю правок). Раньше частицы жались строго к земле (0.05-0.35
  * блока над поверхностью) - теперь свободно раскиданы по высоте (0.3-7 блоков над землёй),
  * то есть реально летают в воздухе леса, а не стелятся туманом по грунту.
+ *
+ * ВАЖНО: класс регистрируется ЯВНО из ClientSetup.onClientSetup (MinecraftForge.EVENT_BUS
+ * .register(SylvariaHazeSpawner.class)), а не через @Mod.EventBusSubscriber. Триггер - тоже
+ * не TickEvent (несколько версий подряд с разной логикой проверки биома/измерения не давали
+ * вообще никакого эффекта - похоже, TickEvent.ClientTickEvent в этой сборке Forge просто не
+ * долетал до слушателя). Вместо него - RenderLevelStageEvent: он жёстко привязан к отрисовке
+ * кадра, а раз игра вообще что-то рисует на экране, это событие гарантированно происходит.
  */
-@Mod.EventBusSubscriber(modid = SylvariaMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class SylvariaHazeSpawner {
 
     // Радиус в блоках вокруг игрока, где может появиться частица.
     private static final int RADIUS = 28;
-    private static final int ATTEMPTS_PER_TICK = 8;
+    // RenderLevelStageEvent летит ~60 раз/сек (за кадром), а не ~20 раз/сек как тик - поэтому
+    // попыток на срабатывание меньше, чтобы итоговая плотность частиц осталась комфортной.
+    private static final int ATTEMPTS_PER_FRAME = 3;
 
     // Диапазон высоты НАД землёй, где частицы летают - не жмутся к земле, а заполняют
     // весь подлесок/пространство между стволами.
     private static final double MIN_HEIGHT_ABOVE_GROUND = 0.3D;
     private static final double MAX_HEIGHT_ABOVE_GROUND = 7.0D;
 
+    private static boolean loggedOnce = false;
+
     @SubscribeEvent
-    public static void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
+    public static void onRenderLevel(RenderLevelStageEvent event) {
+        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) return;
 
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
         ClientLevel level = mc.level;
         if (player == null || level == null) return;
 
+        if (!loggedOnce) {
+            // Разовая метка в лог - открой logs/latest.log и поищи эту строку, чтобы
+            // убедиться, что спавнер реально запускается на твоей стороне.
+            SylvariaMod.LOGGER.info("[Sylvaria] SylvariaHazeSpawner активен, рендер-хук сработал.");
+            loggedOnce = true;
+        }
+
         BlockPos playerPos = player.blockPosition();
         if (!isSylvariaDimension(level)) return;
 
         var random = level.random;
-        for (int i = 0; i < ATTEMPTS_PER_TICK; i++) {
+        for (int i = 0; i < ATTEMPTS_PER_FRAME; i++) {
             if (random.nextFloat() > 0.5F) continue;
 
             int dx = random.nextInt(RADIUS * 2) - RADIUS;

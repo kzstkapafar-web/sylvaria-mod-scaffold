@@ -68,6 +68,11 @@ public class ClientSetup {
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
+        // Явная регистрация вместо @Mod.EventBusSubscriber - см. подробный комментарий
+        // в самом SylvariaHazeSpawner про то, почему автообнаружение оказалось ненадёжным.
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
+                net.sylvariamod.client.particle.SylvariaHazeSpawner.class);
+
         event.enqueueWork(() -> {
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.SYLVARIA_LEAVES.get(), RenderType.cutoutMipped());
             // Glow mushroom uses many small elements with tiny UV rects stretched over large,
