@@ -15,21 +15,23 @@ import net.sylvariamod.SylvariaMod;
 import net.sylvariamod.particle.ModParticles;
 
 /**
- * Стелющийся туман биома - спавнится САМ, вместо ванильного "ambient particle" биома.
- * Ванильный механизм (BiomeSpecialEffects.ambientParticle) берёт случайную точку в объёме
- * вокруг игрока БЕЗ проверки рельефа - отсюда частицы "всплывали из-под земли/воды" и
- * висели прямо в небе. Здесь позиция всегда берётся именно у поверхности земли: находим
- * высоту через heightmap, проверяем что сверху воздух и что это не вода, и только тогда
- * спавним частицу низко над самой землёй.
+ * Летающие в воздухе частицы-мотыльки/искры по всему биому - спавнятся сами вместо
+ * ванильного "ambient particle" биома (тот механизм не проверяет рельеф и давал "всплытие
+ * из-под земли/воды", см. историю правок). Раньше частицы жались строго к земле (0.05-0.35
+ * блока над поверхностью) - теперь свободно раскиданы по высоте (0.3-7 блоков над землёй),
+ * то есть реально летают в воздухе леса, а не стелятся туманом по грунту.
  */
 @Mod.EventBusSubscriber(modid = SylvariaMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class SylvariaHazeSpawner {
 
-    // Радиус в блоках вокруг игрока, где может появиться частица - раньше было 12 (туман был
-    // виден буквально только под ногами), теперь ближе к реальной дальности обзора, чтобы
-    // дымка ощущалась как эффект всего биома, а не пятно вокруг игрока.
+    // Радиус в блоках вокруг игрока, где может появиться частица.
     private static final int RADIUS = 28;
-    private static final int ATTEMPTS_PER_TICK = 6;
+    private static final int ATTEMPTS_PER_TICK = 8;
+
+    // Диапазон высоты НАД землёй, где частицы летают - не жмутся к земле, а заполняют
+    // весь подлесок/пространство между стволами.
+    private static final double MIN_HEIGHT_ABOVE_GROUND = 0.3D;
+    private static final double MAX_HEIGHT_ABOVE_GROUND = 7.0D;
 
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
@@ -53,31 +55,29 @@ public class SylvariaHazeSpawner {
             int z = playerPos.getZ() + dz;
 
             // Точку тоже проверяем на биом - радиус большой, игрок может стоять у самой
-            // границы биома, и без этого дымка вылезала бы за пределы леса.
+            // границы биома, и без этого частицы вылезали бы за пределы леса.
             if (!isSylvariaBiome(level, new BlockPos(x, playerPos.getY(), z))) continue;
 
-            // MOTION_BLOCKING_NO_LEAVES игнорирует листву - находит именно землю под кроной,
-            // а не верх дерева, так что туман не зависает в воздухе на высоте веток.
+            // MOTION_BLOCKING_NO_LEAVES игнорирует листву - это высота именно земли/травы,
+            // а не верхушки дерева, от неё и откладываем высоту полёта частицы.
             int surfaceY = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
-            BlockPos ground = new BlockPos(x, surfaceY - 1, z);
-            BlockPos above = new BlockPos(x, surfaceY, z);
 
-            BlockState groundState = level.getBlockState(ground);
-            FluidState aboveFluid = level.getFluidState(above);
-            BlockState aboveState = level.getBlockState(above);
-
-            // Пропускаем воду/лёд/что угодно жидкое сверху - туман не должен "всплывать" из озёр.
-            if (!aboveFluid.isEmpty()) continue;
-            if (!aboveState.isAir()) continue;
-            if (!isValidGround(groundState)) continue;
-
-            // Игрок не должен быть слишком далеко по высоте (не спавним у него под ногами в
-            // случае резкого перепада рельефа за пределами реального радиуса видимости).
             if (Math.abs(surfaceY - playerPos.getY()) > 32) continue;
 
+            double heightAboveGround = MIN_HEIGHT_ABOVE_GROUND
+                    + random.nextDouble() * (MAX_HEIGHT_ABOVE_GROUND - MIN_HEIGHT_ABOVE_GROUND);
             double px = x + 0.5D + (random.nextDouble() - 0.5D) * 0.8D;
-            double py = surfaceY + 0.05D + random.nextDouble() * 0.35D;
+            double py = surfaceY + heightAboveGround;
             double pz = z + 0.5D + (random.nextDouble() - 0.5D) * 0.8D;
+
+            BlockPos target = BlockPos.containing(px, py, pz);
+            BlockState targetState = level.getBlockState(target);
+            FluidState targetFluid = level.getFluidState(target);
+
+            // Не спавним прямо внутри блока (ствол/листва/земля) или в воде - иначе частицу
+            // не видно вовсе или она "выныривает" из твёрдого объекта.
+            if (!targetState.isAir()) continue;
+            if (!targetFluid.isEmpty()) continue;
 
             level.addParticle(ModParticles.SYLVARIA_HAZE.get(), px, py, pz, 0.0D, 0.0D, 0.0D);
         }
@@ -90,13 +90,5 @@ public class SylvariaHazeSpawner {
         return level.getBiome(pos).unwrapKey()
                 .map(key -> key.location().getNamespace().equals(SylvariaMod.MODID))
                 .orElse(false);
-    }
-
-    private static boolean isValidGround(BlockState state) {
-        return state.is(net.minecraft.tags.BlockTags.DIRT)
-                || state.is(net.minecraft.world.level.block.Blocks.PODZOL)
-                || state.is(net.minecraft.world.level.block.Blocks.MYCELIUM)
-                || state.is(net.minecraft.world.level.block.Blocks.MOSS_BLOCK)
-                || state.is(net.minecraft.world.level.block.Blocks.GRASS_BLOCK);
     }
 }

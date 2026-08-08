@@ -10,13 +10,11 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
 
 /**
- * Стелющийся магический туман - держится низко у земли (спавнится спавнером прямо
- * на поверхности, см. SylvariaHazeSpawner), почти не поднимается вверх, только медленно
- * ползёт вбок и слегка покачивается. Насыщенный фиолетовый в цвет листвы/травы биома
- * (grass_color #7A4BC4), а не блёклый белёсый - и не круглый "пузырь", а вытянутое рваное
- * облако (см. текстуры sylvaria_haze_0..3.png). Используется и как фоновый эффект по земле
- * биома (SylvariaHazeSpawner), и как более частый эффект вокруг светящихся грибов
- * (SylvariaGlowMushroomBlock#animateTick).
+ * Летающая магическая искра - свободно блуждает в воздухе по всем 3 осям (плавно меняет
+ * направление, а не летит по прямой и не жмётся к одной высоте), в отличие от прошлой
+ * версии, которая стелилась туманом у земли. Насыщенный фиолетовый в цвет листвы/травы
+ * биома (grass_color #7A4BC4). Спавнится по всему биому на разной высоте (см.
+ * SylvariaHazeSpawner), и погуще вокруг светящихся грибов (SylvariaGlowMushroomBlock#animateTick).
  */
 public class SylvariaHazeParticle extends TextureSheetParticle {
 
@@ -24,15 +22,15 @@ public class SylvariaHazeParticle extends TextureSheetParticle {
     private static final float BASE_R = 0.62F;
     private static final float BASE_G = 0.34F;
     private static final float BASE_B = 0.88F;
-    private static final float MAX_ALPHA = 0.75F;
+    private static final float MAX_ALPHA = 0.85F;
+
+    // Насколько сильно каждый тик "подруливаем" скорость случайным образом - создаёт живое
+    // блуждающее движение вместо прямой линии или прилипания к одному месту.
+    private static final double WANDER_STRENGTH = 0.0018D;
+    private static final double MAX_SPEED = 0.028D;
 
     private final SpriteSet spriteSet;
-
     private final float targetAlpha;
-    private final double swayPhase;
-    private final double swaySpeed;
-    private final double swayAmount;
-    private final double baseY;
 
     protected SylvariaHazeParticle(ClientLevel level, double x, double y, double z,
                                     double dx, double dy, double dz, SpriteSet sprites) {
@@ -42,20 +40,16 @@ public class SylvariaHazeParticle extends TextureSheetParticle {
         this.gravity = 0.0F;
         this.friction = 1.0F;
 
-        // Никакого подъёма вверх - только очень медленный горизонтальный дрейф "по земле".
-        // Вертикальное покачивание делаем отдельно синусом в tick(), а не постоянной скоростью,
-        // чтобы туман стелился на месте, а не улетал в небо.
-        this.xd = dx + (this.random.nextDouble() - 0.5D) * 0.006D;
-        this.yd = 0.0D;
-        this.zd = dz + (this.random.nextDouble() - 0.5D) * 0.006D;
+        // Стартовая скорость в случайном направлении - дальше блуждание докручивает её в tick().
+        double ang1 = this.random.nextDouble() * Math.PI * 2.0D;
+        double ang2 = this.random.nextDouble() * Math.PI * 2.0D;
+        double speed = MAX_SPEED * (0.3D + this.random.nextDouble() * 0.5D);
+        this.xd = dx + Math.cos(ang1) * Math.cos(ang2) * speed;
+        this.yd = dy + Math.sin(ang2) * speed * 0.6D;
+        this.zd = dz + Math.sin(ang1) * Math.cos(ang2) * speed;
 
-        this.baseY = y;
-        this.swayPhase = this.random.nextDouble() * Math.PI * 2.0D;
-        this.swaySpeed = 0.02D + this.random.nextDouble() * 0.02D;
-        this.swayAmount = 0.04D + this.random.nextDouble() * 0.05D;
-
-        this.quadSize = 0.55F + this.random.nextFloat() * 0.65F;
-        this.lifetime = 140 + this.random.nextInt(100);
+        this.quadSize = 0.12F + this.random.nextFloat() * 0.14F;
+        this.lifetime = 200 + this.random.nextInt(160);
 
         float variance = 0.9F + this.random.nextFloat() * 0.2F;
         this.rCol = Math.min(1.0F, BASE_R * variance);
@@ -69,21 +63,32 @@ public class SylvariaHazeParticle extends TextureSheetParticle {
 
     @Override
     public void tick() {
+        // Живое блуждание: на каждый тик добавляем маленький случайный импульс к скорости
+        // и подрезаем её сверху, чтобы искра плавно меняла курс, а не летела по прямой
+        // и не разгонялась бесконечно.
+        this.xd += (this.random.nextDouble() - 0.5D) * WANDER_STRENGTH;
+        this.yd += (this.random.nextDouble() - 0.5D) * WANDER_STRENGTH * 0.7D;
+        this.zd += (this.random.nextDouble() - 0.5D) * WANDER_STRENGTH;
+
+        double speed = Math.sqrt(this.xd * this.xd + this.yd * this.yd + this.zd * this.zd);
+        if (speed > MAX_SPEED) {
+            double scale = MAX_SPEED / speed;
+            this.xd *= scale;
+            this.yd *= scale;
+            this.zd *= scale;
+        }
+
         super.tick();
+
         if (!this.removed) {
             this.setSpriteFromAge(this.spriteSet);
 
-            // Держим частицу у исходной высоты земли + лёгкое синусоидальное покачивание -
-            // никакого систематического всплытия вверх.
-            double sway = Math.sin(swayPhase + this.age * swaySpeed) * swayAmount;
-            this.setPos(this.x, this.baseY + sway, this.z);
-
             float lifeRatio = (float) this.age / (float) this.lifetime;
-            // Плавно нарастаем первые 20% жизни, держим насыщенный пик, гаснем последние 45%.
-            if (lifeRatio < 0.2F) {
-                this.alpha = Mth.lerp(lifeRatio / 0.2F, 0.0F, targetAlpha);
-            } else if (lifeRatio > 0.55F) {
-                this.alpha = Mth.lerp((lifeRatio - 0.55F) / 0.45F, targetAlpha, 0.0F);
+            // Плавно нарастаем первые 15% жизни, держим насыщенный пик, гаснем последние 35%.
+            if (lifeRatio < 0.15F) {
+                this.alpha = Mth.lerp(lifeRatio / 0.15F, 0.0F, targetAlpha);
+            } else if (lifeRatio > 0.65F) {
+                this.alpha = Mth.lerp((lifeRatio - 0.65F) / 0.35F, targetAlpha, 0.0F);
             } else {
                 this.alpha = targetAlpha;
             }
@@ -92,9 +97,9 @@ public class SylvariaHazeParticle extends TextureSheetParticle {
 
     @Override
     public float getQuadSize(float partialTicks) {
-        // Лёгкое разрастание со временем - ощущение расползающегося тумана, а не жёсткой точки.
-        float lifeRatio = ((float) this.age + partialTicks) / (float) this.lifetime;
-        return this.quadSize * (0.75F + lifeRatio * 0.4F);
+        // Лёгкое пульсирующее мерцание размера - живее, чем константный размер точки.
+        float pulse = 0.85F + 0.15F * Mth.sin((this.age + partialTicks) * 0.2F);
+        return this.quadSize * pulse;
     }
 
     @Override
