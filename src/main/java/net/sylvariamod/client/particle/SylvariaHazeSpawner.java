@@ -40,6 +40,12 @@ public class SylvariaHazeSpawner {
     private static final double MAX_HEIGHT_ABOVE_GROUND = 7.0D;
 
     private static boolean loggedOnce = false;
+    private static int frameCounter = 0;
+    private static int rejectedDimension = 0;
+    private static int rejectedHeightDiff = 0;
+    private static int rejectedNotAir = 0;
+    private static int rejectedFluid = 0;
+    private static int spawnedCount = 0;
 
     @SubscribeEvent
     public static void onRenderLevel(RenderLevelStageEvent event) {
@@ -57,8 +63,23 @@ public class SylvariaHazeSpawner {
             loggedOnce = true;
         }
 
+        // Раз в ~200 кадров (~каждые 3 сек) печатаем ПОЛНУЮ сводку: в каком мы измерении,
+        // прошла ли проверка, и на каком именно фильтре отсеиваются попытки спавна. Этого
+        // достаточно, чтобы одним логом точно понять, где затык, вместо гадания по коду.
+        frameCounter++;
+        boolean printSummary = frameCounter % 200 == 0;
+
         BlockPos playerPos = player.blockPosition();
-        if (!isSylvariaDimension(level)) return;
+        boolean inSylvaria = isSylvariaDimension(level);
+        if (!inSylvaria) {
+            rejectedDimension++;
+            if (printSummary) {
+                SylvariaMod.LOGGER.info("[Sylvaria] СВОДКА: измерение={} (namespace={}) - НЕ sylvaria, спавн пропускается. Отклонено по измерению за интервал: {}",
+                        level.dimension().location(), level.dimension().location().getNamespace(), rejectedDimension);
+                rejectedDimension = 0;
+            }
+            return;
+        }
 
         var random = level.random;
         for (int i = 0; i < ATTEMPTS_PER_FRAME; i++) {
@@ -73,7 +94,10 @@ public class SylvariaHazeSpawner {
             // а не верхушки дерева, от неё и откладываем высоту полёта частицы.
             int surfaceY = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
 
-            if (Math.abs(surfaceY - playerPos.getY()) > 32) continue;
+            if (Math.abs(surfaceY - playerPos.getY()) > 32) {
+                rejectedHeightDiff++;
+                continue;
+            }
 
             double heightAboveGround = MIN_HEIGHT_ABOVE_GROUND
                     + random.nextDouble() * (MAX_HEIGHT_ABOVE_GROUND - MIN_HEIGHT_ABOVE_GROUND);
@@ -87,10 +111,26 @@ public class SylvariaHazeSpawner {
 
             // Не спавним прямо внутри блока (ствол/листва/земля) или в воде - иначе частицу
             // не видно вовсе или она "выныривает" из твёрдого объекта.
-            if (!targetState.isAir()) continue;
-            if (!targetFluid.isEmpty()) continue;
+            if (!targetState.isAir()) {
+                rejectedNotAir++;
+                continue;
+            }
+            if (!targetFluid.isEmpty()) {
+                rejectedFluid++;
+                continue;
+            }
 
             level.addParticle(ModParticles.SYLVARIA_HAZE.get(), px, py, pz, 0.0D, 0.0D, 0.0D);
+            spawnedCount++;
+        }
+
+        if (printSummary) {
+            SylvariaMod.LOGGER.info("[Sylvaria] СВОДКА: измерение OK ({}). За интервал заспавнено={}, отклонено по высоте={}, отклонено (не воздух)={}, отклонено (жидкость)={}. Игрок y={}",
+                    level.dimension().location(), spawnedCount, rejectedHeightDiff, rejectedNotAir, rejectedFluid, playerPos.getY());
+            spawnedCount = 0;
+            rejectedHeightDiff = 0;
+            rejectedNotAir = 0;
+            rejectedFluid = 0;
         }
     }
 
