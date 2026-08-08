@@ -43,7 +43,7 @@ public class SylvariaHazeSpawner {
         if (player == null || level == null) return;
 
         BlockPos playerPos = player.blockPosition();
-        if (!isSylvariaBiome(level, playerPos)) return;
+        if (!isSylvariaDimension(level)) return;
 
         var random = level.random;
         for (int i = 0; i < ATTEMPTS_PER_TICK; i++) {
@@ -53,10 +53,6 @@ public class SylvariaHazeSpawner {
             int dz = random.nextInt(RADIUS * 2) - RADIUS;
             int x = playerPos.getX() + dx;
             int z = playerPos.getZ() + dz;
-
-            // Точку тоже проверяем на биом - радиус большой, игрок может стоять у самой
-            // границы биома, и без этого частицы вылезали бы за пределы леса.
-            if (!isSylvariaBiome(level, new BlockPos(x, playerPos.getY(), z))) continue;
 
             // MOTION_BLOCKING_NO_LEAVES игнорирует листву - это высота именно земли/травы,
             // а не верхушки дерева, от неё и откладываем высоту полёта частицы.
@@ -83,12 +79,13 @@ public class SylvariaHazeSpawner {
         }
     }
 
-    // По неймспейсу мода, а не по точному имени файла биома - надёжнее (сработает для
-    // sylvaria_forest и для любого другого биома мода, если такой появится) и защищено
-    // от несовпадения из-за формата ключа/пути.
-    private static boolean isSylvariaBiome(ClientLevel level, BlockPos pos) {
-        return level.getBiome(pos).unwrapKey()
-                .map(key -> key.location().getNamespace().equals(SylvariaMod.MODID))
-                .orElse(false);
+    // Проверяем ИЗМЕРЕНИЕ, а не биом через Holder.unwrapKey() - тот способ ненадёжен (может
+    // не резолвиться на границах чанков/при биом-бленде и просто возвращать false молча,
+    // из-за чего фоновый рой не спавнился нигде, а искры были видны только у грибов через
+    // Block#animateTick, который от биома вообще не зависит). Весь dimension sylvaria - это
+    // один фиксированный биом (см. ModDimensions/worldgen), так что достаточно проверить
+    // ключ измерения - он не зависит от блендинга и всегда резолвится однозначно.
+    private static boolean isSylvariaDimension(ClientLevel level) {
+        return level.dimension().location().getNamespace().equals(SylvariaMod.MODID);
     }
 }
