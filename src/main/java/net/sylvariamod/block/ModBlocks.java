@@ -149,6 +149,10 @@ public class ModBlocks {
     // Переиспользует SylvariaGlowMushroomBlock из шага 1 как есть (класс уже параметризован по
     // форме хитбокса и умеет светиться/испускать искры animateTick - никакой мухомор-специфики
     // внутри него нет). Свой хитбокс под приземистый кластер игл вместо полного блока гриба.
+    // Хитбокс под новую модель (веер кристаллических осколков-крестовин): footprint
+    // примерно 1-15 по X/Z (после поворота диагональю достаёт почти до краёв блока),
+    // высота ограничена 16 - у самого высокого осколка геометрия уходит чуть выше (до 19),
+    // это чисто визуальный, некликабельный "хвостик", как у декоративных кристаллов.
     public static final RegistryObject<Block> SYLVARIA_GLOW_CRYSTAL = BLOCKS.register("sylvaria_glow_crystal",
             () -> new net.sylvariamod.block.SylvariaGlowMushroomBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_CYAN)
@@ -156,7 +160,7 @@ public class ModBlocks {
                     .sound(SoundType.AMETHYST_CLUSTER)
                     .lightLevel(state -> 7) // тускло, как редстоун-факел - единый стиль со всей флорой
                     .pushReaction(PushReaction.DESTROY),
-                    net.minecraft.world.level.block.Block.box(5.0D, 0.0D, 5.0D, 13.0D, 12.0D, 13.0D)));
+                    net.minecraft.world.level.block.Block.box(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0D)));
 
     public static final RegistryObject<Item> SYLVARIA_GLOW_CRYSTAL_ITEM = ITEMS.register("sylvaria_glow_crystal",
             () -> new BlockItem(SYLVARIA_GLOW_CRYSTAL.get(), new Item.Properties()));

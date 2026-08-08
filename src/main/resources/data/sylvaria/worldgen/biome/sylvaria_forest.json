@@ -50,7 +50,9 @@
       "minecraft:ore_lapis",
       "minecraft:ore_copper"
     ],
-    [],
+    [
+      "sylvaria:sylvaria_glow_crystal_cave_patch"
+    ],
     [
       "minecraft:spring_water"
     ],
@@ -69,16 +71,46 @@
   ],
   "spawners": {
     "monster": [
-      { "type": "minecraft:spider", "weight": 60, "minCount": 2, "maxCount": 4 },
-      { "type": "minecraft:zombie", "weight": 60, "minCount": 2, "maxCount": 4 },
-      { "type": "minecraft:skeleton", "weight": 60, "minCount": 2, "maxCount": 4 }
+      {
+        "type": "minecraft:spider",
+        "weight": 60,
+        "minCount": 2,
+        "maxCount": 4
+      },
+      {
+        "type": "minecraft:zombie",
+        "weight": 60,
+        "minCount": 2,
+        "maxCount": 4
+      },
+      {
+        "type": "minecraft:skeleton",
+        "weight": 60,
+        "minCount": 2,
+        "maxCount": 4
+      }
     ],
     "creature": [
-      { "type": "minecraft:sheep", "weight": 8, "minCount": 2, "maxCount": 4 },
-      { "type": "minecraft:wolf", "weight": 5, "minCount": 2, "maxCount": 4 }
+      {
+        "type": "minecraft:sheep",
+        "weight": 8,
+        "minCount": 2,
+        "maxCount": 4
+      },
+      {
+        "type": "minecraft:wolf",
+        "weight": 5,
+        "minCount": 2,
+        "maxCount": 4
+      }
     ],
     "ambient": [
-      { "type": "minecraft:bat", "weight": 10, "minCount": 4, "maxCount": 8 }
+      {
+        "type": "minecraft:bat",
+        "weight": 10,
+        "minCount": 4,
+        "maxCount": 8
+      }
     ],
     "axolotls": [],
     "underground_water_creature": [],
